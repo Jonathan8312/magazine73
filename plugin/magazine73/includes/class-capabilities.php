@@ -34,6 +34,7 @@ final class Capabilities {
 			}
 		}
 
+		( new Post_Type() )->register();
 		flush_rewrite_rules();
 	}
 
