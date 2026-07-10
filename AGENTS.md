@@ -146,8 +146,8 @@ Lightweight static checks:
 
 - PHP syntax validation is the primary check: `php -l <file>` on the PHP files you change
   (e.g. `plugin/magazine73/magazine73.php`).
-- PHPCS, PHPStan, and PHPUnit are referenced in the Quality section but are NOT yet
-  configured in this repo (no `composer.json`). Run them only once they are added.
+- PHPCS and PHPStan are configured through Composer (`composer install`, then
+  `vendor/bin/phpcs` and `vendor/bin/phpstan`).
 
 Dependencies / build:
 

@@ -1,0 +1,56 @@
+name: Bug report
+description: Report incorrect or broken Magazine73 behavior.
+title: "fix: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Provide enough detail to reproduce the issue in a WordPress environment compatible with the MVP requirements.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened and what was expected?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Numbered steps that consistently trigger the bug.
+      placeholder: |
+        1. Activate Magazine73.
+        2. Create a published magazine with two WebP pages.
+        3. Open the public URL.
+    validations:
+      required: true
+  - type: input
+    id: wordpress_version
+    attributes:
+      label: WordPress version
+      placeholder: 6.5
+    validations:
+      required: true
+  - type: input
+    id: php_version
+    attributes:
+      label: PHP version
+      placeholder: 8.0
+    validations:
+      required: true
+  - type: input
+    id: plugin_version
+    attributes:
+      label: Magazine73 version
+      placeholder: 0.1.0
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or screenshots
+      description: Include browser console output, PHP notices, or screenshots when available.
+    validations:
+      required: false

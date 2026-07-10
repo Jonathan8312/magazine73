@@ -1,0 +1,47 @@
+name: Vite build
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  vite-build:
+    name: Build frontend assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect frontend tooling
+        id: frontend
+        run: |
+          if [ -f package.json ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Node.js
+        if: steps.frontend.outputs.enabled == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install npm dependencies
+        if: steps.frontend.outputs.enabled == 'true'
+        run: npm ci
+
+      - name: Build production assets
+        if: steps.frontend.outputs.enabled == 'true'
+        run: npm run build
+
+      - name: Skip build when frontend tooling is absent
+        if: steps.frontend.outputs.enabled == 'false'
+        run: echo "No package.json found. Skipping Vite build until frontend tooling is added."

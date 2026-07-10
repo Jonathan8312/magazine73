@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<ruleset name="Magazine73">
+	<description>WordPress Coding Standards for Magazine73.</description>
+
+	<file>plugin/magazine73</file>
+
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/third-party/*</exclude-pattern>
+
+	<arg value="sp"/>
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+
+	<config name="testVersion" value="8.0-"/>
+
+	<rule ref="WordPress">
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+	</rule>
+
+	<rule ref="Squiz.Commenting.FileComment.MissingPackageTag">
+		<exclude-pattern>*/magazine73.php</exclude-pattern>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="magazine73"/>
+				<element value="Magazine73"/>
+				<element value="MAGAZINE73"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="PHPCompatibilityWP"/>
+</ruleset>
