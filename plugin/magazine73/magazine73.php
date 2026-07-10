@@ -4,8 +4,8 @@
  * Plugin URI: https://73software.com/magazine73
  * Description: Permite administrar y publicar revistas digitales con efecto de cambio de página.
  * Version: 0.1.0
- * Requires at least: 6.7
- * Requires PHP: 8.1
+ * Requires at least: 6.5
+ * Requires PHP: 8.0
  * Author: Jonathan Torres
  * Author URI: https://73software.com
  * License: GPL-2.0-or-later
@@ -14,4 +14,28 @@
  * Domain Path: /languages
  */
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
+
+if ( ! defined( 'MAGAZINE73_VERSION' ) ) {
+	define( 'MAGAZINE73_VERSION', '0.1.0' );
+}
+
+if ( ! defined( 'MAGAZINE73_FILE' ) ) {
+	define( 'MAGAZINE73_FILE', __FILE__ );
+}
+
+if ( ! defined( 'MAGAZINE73_PATH' ) ) {
+	define( 'MAGAZINE73_PATH', plugin_dir_path( MAGAZINE73_FILE ) );
+}
+
+if ( ! defined( 'MAGAZINE73_URL' ) ) {
+	define( 'MAGAZINE73_URL', plugin_dir_url( MAGAZINE73_FILE ) );
+}
+
+if ( ! defined( 'MAGAZINE73_BASENAME' ) ) {
+	define( 'MAGAZINE73_BASENAME', plugin_basename( MAGAZINE73_FILE ) );
+}
+
+require_once MAGAZINE73_PATH . 'includes/class-plugin.php';
+
+( new Magazine73\Plugin() )->init();
