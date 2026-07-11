@@ -17,6 +17,7 @@
 /node_modules/
 /package.json
 /package-lock.json
+/assets/
 /phpcs.xml.dist
 /phpstan.neon.dist
 /phpstan-bootstrap.php
