@@ -24,6 +24,8 @@ final class Plugin {
 		( new Magazine_Meta() )->init();
 		( new Magazine_Pages() )->init();
 		( new Viewer_Settings() )->init();
+		( new Shortcode() )->init();
+		( new Public_Magazine() )->init();
 		( new Admin_Metabox() )->init();
 		( new Admin_Pages_Panel() )->init();
 		( new Admin_Viewer_Settings_Metabox() )->init();

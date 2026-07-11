@@ -1,0 +1,39 @@
+.magazine73-message {
+	border: 1px solid #dcdcde;
+	border-radius: 0.25rem;
+	margin-block: 1rem;
+	padding: 1rem;
+}
+
+.magazine73-public-magazine {
+	margin-block: 2rem;
+	margin-inline: auto;
+	max-width: 72rem;
+	padding-inline: 1rem;
+}
+
+.magazine73-public-magazine__header {
+	margin-block-end: 1.5rem;
+	text-align: center;
+}
+
+.magazine73-public-magazine__title {
+	margin-block: 0 0.5rem;
+}
+
+.magazine73-public-magazine__edition {
+	color: inherit;
+	font: inherit;
+	margin-block: 0 1rem;
+	opacity: 0.85;
+}
+
+.magazine73-public-magazine__description {
+	margin-inline: auto;
+	max-width: 48rem;
+}
+
+.magazine73-public-magazine__viewer {
+	margin-inline: auto;
+	max-width: 100%;
+}
