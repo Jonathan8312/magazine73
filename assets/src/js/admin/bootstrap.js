@@ -4,6 +4,7 @@
 
 import { markReady } from '../shared/helpers.js';
 import { initPagesPanel } from './pages-panel.js';
+import { initViewerSettingsPanel } from './viewer-settings-panel.js';
 
 /**
  * Initialize Magazine73 admin enhancements.
@@ -14,4 +15,5 @@ export function initAdmin() {
 	} );
 
 	initPagesPanel();
+	initViewerSettingsPanel();
 }

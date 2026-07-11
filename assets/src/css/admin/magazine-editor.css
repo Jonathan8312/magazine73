@@ -48,3 +48,17 @@
 	object-fit: cover;
 	width: 48px;
 }
+
+.magazine73-viewer-settings-panel fieldset {
+	border: 0;
+	margin: 1rem 0 0;
+	padding: 0;
+}
+
+.magazine73-viewer-settings-panel legend {
+	margin-block-end: 0.5rem;
+}
+
+.magazine73-settings-page .form-table th {
+	width: 220px;
+}

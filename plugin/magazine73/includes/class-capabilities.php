@@ -15,6 +15,11 @@ defined( 'ABSPATH' ) || exit;
 final class Capabilities {
 
 	/**
+	 * Capability required to manage plugin settings.
+	 */
+	public const MANAGE_SETTINGS_CAP = 'manage_magazine73_settings';
+
+	/**
 	 * Grant magazine capabilities to supported roles.
 	 */
 	public static function activate(): void {
@@ -26,6 +31,8 @@ final class Capabilities {
 			foreach ( array_unique( $capabilities ) as $capability ) {
 				$administrator->add_cap( $capability );
 			}
+
+			$administrator->add_cap( self::MANAGE_SETTINGS_CAP );
 		}
 
 		if ( $editor ) {
@@ -53,6 +60,12 @@ final class Capabilities {
 			foreach ( $capabilities as $capability ) {
 				$role->remove_cap( $capability );
 			}
+		}
+
+		$administrator = get_role( 'administrator' );
+
+		if ( $administrator ) {
+			$administrator->remove_cap( self::MANAGE_SETTINGS_CAP );
 		}
 
 		flush_rewrite_rules();
