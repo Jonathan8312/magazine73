@@ -21,22 +21,36 @@ jobs:
   analyze:
     name: Analyze JavaScript and TypeScript
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        language:
-          - javascript-typescript
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Detect JavaScript or TypeScript sources
+        id: sources
+        run: |
+          if find . -type f \( -name '*.js' -o -name '*.ts' -o -name '*.jsx' -o -name '*.tsx' \) \
+            ! -path './node_modules/*' \
+            ! -path './vendor/*' \
+            | grep -q .; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Initialize CodeQL
+        if: steps.sources.outputs.enabled == 'true'
         uses: github/codeql-action/init@v3
         with:
-          languages: ${{ matrix.language }}
+          languages: javascript-typescript
 
       - name: Autobuild
+        if: steps.sources.outputs.enabled == 'true'
         uses: github/codeql-action/autobuild@v3
 
       - name: Perform CodeQL analysis
+        if: steps.sources.outputs.enabled == 'true'
         uses: github/codeql-action/analyze@v3
+
+      - name: Skip analysis when frontend sources are absent
+        if: steps.sources.outputs.enabled == 'false'
+        run: echo "No JavaScript or TypeScript sources found. Skipping CodeQL until frontend tooling is added."
