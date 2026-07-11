@@ -43,6 +43,8 @@ final class Capabilities {
 
 		( new Post_Type() )->register();
 		flush_rewrite_rules();
+
+		Data_Lifecycle::maybe_run_migrations();
 	}
 
 	/**
