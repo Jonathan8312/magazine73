@@ -9,3 +9,4 @@ parameters:
 		- phpstan-bootstrap.php
 	excludePaths:
 		- plugin/magazine73/third-party/*
+		- plugin/magazine73/templates/*
