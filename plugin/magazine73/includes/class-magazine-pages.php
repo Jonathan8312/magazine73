@@ -217,7 +217,7 @@ final class Magazine_Pages {
 			);
 		}
 
-		if ( 0 !== count( $pages ) % 2 ) {
+		if ( 0 === count( $pages ) % 2 ) {
 			return $pages;
 		}
 
@@ -231,6 +231,31 @@ final class Magazine_Pages {
 		);
 
 		return $pages;
+	}
+
+	/**
+	 * Build a content hash from ordered page attachment IDs.
+	 *
+	 * @param int $post_id Magazine post ID.
+	 */
+	public static function get_content_hash( int $post_id ): string {
+		$page_ids = self::get_page_ids( $post_id );
+
+		if ( empty( $page_ids ) ) {
+			return '';
+		}
+
+		$hash_input = implode(
+			',',
+			array_map(
+				static function ( int $page_id ): string {
+					return (string) $page_id;
+				},
+				$page_ids
+			)
+		);
+
+		return hash( 'sha256', $hash_input );
 	}
 
 	/**

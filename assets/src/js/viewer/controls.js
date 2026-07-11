@@ -53,8 +53,10 @@ function injectControlIcons( viewerElement ) {
  * @param {HTMLElement} viewerElement Viewer root element.
  * @param {import('../../../../plugin/magazine73/third-party/stpageflip/dist/js/page-flip.module.js').PageFlip} pageFlip Page flip instance.
  * @param {object} config Viewer configuration.
+ * @param {import('./page-loader.js').PageLoader|null} pageLoader Progressive page loader.
+ * @param {(pageIndex: number) => void|null} onPageChange Page change callback.
  */
-export function bindViewerControls( viewerElement, pageFlip, config ) {
+export function bindViewerControls( viewerElement, pageFlip, config, pageLoader = null, onPageChange = null ) {
 	injectControlIcons( viewerElement );
 
 	const previousButton = viewerElement.querySelector( '[data-magazine73-action="prev"]' );
@@ -86,6 +88,10 @@ export function bindViewerControls( viewerElement, pageFlip, config ) {
 			const currentPage = pageFlip.getCurrentPageIndex() + 1;
 			const totalPages = pageFlip.getPageCount();
 			statusElement.textContent = `${ currentPage } / ${ totalPages }`;
+		}
+
+		if ( 'function' === typeof onPageChange ) {
+			onPageChange( pageFlip.getCurrentPageIndex() );
 		}
 
 		if ( previousButton instanceof HTMLButtonElement ) {
@@ -199,7 +205,7 @@ export function bindViewerControls( viewerElement, pageFlip, config ) {
 				item.dataset.pageIndex = String( index );
 
 				const image = document.createElement( 'img' );
-				image.src = page.url;
+				image.src = pageLoader?.resolvedUrls?.[ index ] || page.url;
 				image.alt = '';
 				image.loading = 'lazy';
 				item.appendChild( image );
