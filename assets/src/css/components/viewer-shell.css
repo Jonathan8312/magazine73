@@ -20,6 +20,19 @@
 	overflow: hidden;
 }
 
+.magazine73-viewer__viewport {
+	overflow: auto;
+	width: 100%;
+}
+
+.magazine73-viewer__zoom {
+	margin-inline: auto;
+	max-width: 100%;
+	transform-origin: center top;
+	transition: transform 0.2s ease;
+	width: fit-content;
+}
+
 .magazine73-viewer__book {
 	margin-inline: auto;
 	max-width: 100%;
