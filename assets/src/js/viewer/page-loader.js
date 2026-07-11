@@ -6,6 +6,29 @@ const INITIAL_PAGE_COUNT = 4;
 const NEARBY_PRIORITY_RADIUS = 4;
 
 /**
+ * Validate an image source before DOM assignment.
+ *
+ * @param {string} url Candidate image URL.
+ */
+function isAllowedImageSource( url ) {
+	if ( 'string' !== typeof url || '' === url ) {
+		return false;
+	}
+
+	if ( url.startsWith( 'data:image/' ) ) {
+		return true;
+	}
+
+	try {
+		const parsed = new URL( url, window.location.origin );
+
+		return 'http:' === parsed.protocol || 'https:' === parsed.protocol;
+	} catch {
+		return false;
+	}
+}
+
+/**
  * @typedef {object} ViewerPage
  * @property {string} url Page image URL.
  * @property {number} width Page width.
@@ -208,7 +231,13 @@ export class PageLoader {
 
 			image.addEventListener( 'load', () => finish( true ) );
 			image.addEventListener( 'error', () => finish( false ) );
-			image.src = page.url;
+
+			if ( ! isAllowedImageSource( page.url ) ) {
+				finish( false );
+				return;
+			}
+
+			image.setAttribute( 'src', page.url );
 
 			if ( image.complete ) {
 				finish( true );

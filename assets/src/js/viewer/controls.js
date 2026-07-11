@@ -27,6 +27,29 @@ const ZOOM_MAX = 2;
 const ZOOM_STEP = 0.25;
 
 /**
+ * Validate an image source before DOM assignment.
+ *
+ * @param {string} url Candidate image URL.
+ */
+function isAllowedImageSource( url ) {
+	if ( 'string' !== typeof url || '' === url ) {
+		return false;
+	}
+
+	if ( url.startsWith( 'data:image/' ) ) {
+		return true;
+	}
+
+	try {
+		const parsed = new URL( url, window.location.origin );
+
+		return 'http:' === parsed.protocol || 'https:' === parsed.protocol;
+	} catch {
+		return false;
+	}
+}
+
+/**
  * Inject SVG icons into control buttons.
  *
  * @param {HTMLElement} viewerElement Viewer root element.
@@ -205,7 +228,13 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 				item.dataset.pageIndex = String( index );
 
 				const image = document.createElement( 'img' );
-				image.src = pageLoader?.resolvedUrls?.[ index ] || page.url;
+				const thumbnailUrl = pageLoader?.resolvedUrls?.[ index ] || page.url;
+
+				if ( ! isAllowedImageSource( thumbnailUrl ) ) {
+					return;
+				}
+
+				image.setAttribute( 'src', thumbnailUrl );
 				image.alt = '';
 				image.loading = 'lazy';
 				item.appendChild( image );
