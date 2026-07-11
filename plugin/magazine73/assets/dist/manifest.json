@@ -4,7 +4,7 @@
     "name": "helpers"
   },
   "assets/src/entries/admin.js": {
-    "file": "js/magazine73-admin-BtHck0kL.js",
+    "file": "js/magazine73-admin-NskkP716.js",
     "name": "magazine73-admin",
     "src": "assets/src/entries/admin.js",
     "isEntry": true,
@@ -12,11 +12,11 @@
       "_helpers-fXvRE6kV.js"
     ],
     "css": [
-      "css/magazine73-admin-wBnn_gK3.css"
+      "css/magazine73-admin-D_LsGtzz.css"
     ]
   },
   "assets/src/entries/viewer.js": {
-    "file": "js/magazine73-viewer-BlN40fGO.js",
+    "file": "js/magazine73-viewer-DZJgREG9.js",
     "name": "magazine73-viewer",
     "src": "assets/src/entries/viewer.js",
     "isEntry": true,
@@ -24,7 +24,7 @@
       "_helpers-fXvRE6kV.js"
     ],
     "css": [
-      "css/magazine73-viewer-Cs3CnBwA.css"
+      "css/magazine73-viewer-C7EEo6Gu.css"
     ]
   }
 }

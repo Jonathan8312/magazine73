@@ -43,8 +43,9 @@ $magazine73_show_next         = ! empty( $settings['controls']['next'] );
 $magazine73_show_counter      = ! empty( $settings['controls']['counter'] );
 $magazine73_show_zoom         = ! empty( $settings['controls']['zoom'] );
 $magazine73_show_fullscreen   = ! empty( $settings['controls']['fullscreen'] );
+$magazine73_show_download     = ! empty( $settings['controls']['download'] ) && ! empty( $viewer_config['download']['url'] );
 $magazine73_show_thumbnails   = ! empty( $settings['controls']['thumbnails'] );
-$magazine73_show_controls_bar = $magazine73_show_previous || $magazine73_show_next || $magazine73_show_counter || $magazine73_show_zoom || $magazine73_show_fullscreen || $magazine73_show_thumbnails;
+$magazine73_show_controls_bar = $magazine73_show_previous || $magazine73_show_next || $magazine73_show_counter || $magazine73_show_zoom || $magazine73_show_fullscreen || $magazine73_show_download || $magazine73_show_thumbnails;
 ?>
 <div
 	class="magazine73-viewer"
@@ -156,6 +157,16 @@ $magazine73_show_controls_bar = $magazine73_show_previous || $magazine73_show_ne
 						>
 							<span class="magazine73-controls__icon" data-magazine73-icon="fullscreen-enter" aria-hidden="true"></span>
 						</button>
+					<?php endif; ?>
+					<?php if ( $magazine73_show_download ) : ?>
+						<a
+							class="magazine73-controls__button"
+							href="<?php echo esc_url( (string) $viewer_config['download']['url'] ); ?>"
+							download="<?php echo esc_attr( (string) $viewer_config['download']['filename'] ); ?>"
+							aria-label="<?php esc_attr_e( 'Download PDF', 'magazine73' ); ?>"
+						>
+							<span class="magazine73-controls__icon" data-magazine73-icon="download" aria-hidden="true"></span>
+						</a>
 					<?php endif; ?>
 				</div>
 			<?php endif; ?>

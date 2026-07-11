@@ -10,6 +10,7 @@ import zoomResetIcon from '../../icons/zoom-reset.svg?raw';
 import fullscreenEnterIcon from '../../icons/fullscreen-enter.svg?raw';
 import fullscreenExitIcon from '../../icons/fullscreen-exit.svg?raw';
 import thumbnailsIcon from '../../icons/thumbnails.svg?raw';
+import downloadIcon from '../../icons/download.svg?raw';
 import { sanitizeImageUrl } from './page-loader.js';
 
 const ICONS = {
@@ -21,6 +22,7 @@ const ICONS = {
 	'fullscreen-enter': fullscreenEnterIcon,
 	'fullscreen-exit': fullscreenExitIcon,
 	thumbnails: thumbnailsIcon,
+	download: downloadIcon,
 };
 
 const ZOOM_MIN = 1;
