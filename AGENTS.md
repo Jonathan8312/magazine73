@@ -6,7 +6,7 @@ Magazine73 is a WordPress plugin for creating and publishing digital magazines w
 
 ## Core requirements
 
-- WordPress 6.5 or newer.
+- WordPress 6.6 or newer.
 - PHP 8.0 or newer.
 - Source language and fallback language: English.
 - Text domain: `magazine73`.

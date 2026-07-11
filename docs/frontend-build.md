@@ -15,19 +15,11 @@ Production assets are written to `plugin/magazine73/assets/dist/` and are enqueu
 
 ## WordPress loading strategy
 
-Magazine73 supports WordPress 6.5 as its minimum version.
+Magazine73 supports WordPress 6.6 as its minimum version.
 
-### Viewer (frontend)
+Viewer and admin entry scripts use the WordPress Script Modules API through `wp_enqueue_script_module()`.
 
-Viewer entry scripts use the WordPress 6.5 Script Modules API through `wp_enqueue_script_module()`.
-
-### Admin
-
-WordPress 6.5 exposes Script Modules on the frontend, but admin support arrived in WordPress 6.6. To keep WordPress 6.5 compatibility, admin entry scripts are enqueued with `wp_enqueue_script()` and converted to `type="module"` through a `script_loader_tag` filter scoped only to Magazine73 admin handles.
-
-### Manifest handling
-
-`Magazine73\Assets` enqueues only Vite entry JavaScript files. Generated chunks are loaded by native relative ES module imports inside the compiled entry files. Manifest `imports` are traversed recursively only to collect and deduplicate CSS dependencies.
+`Magazine73\Assets` enqueues only Vite entry JavaScript modules. Generated chunks are loaded by native relative ES module imports inside the compiled entry files. Manifest `imports` are traversed recursively only to collect and deduplicate CSS dependencies.
 
 ## Browserslist
 

@@ -30,7 +30,7 @@ body:
     id: wordpress_version
     attributes:
       label: WordPress version
-      placeholder: 6.5
+      placeholder: 6.6
     validations:
       required: true
   - type: input

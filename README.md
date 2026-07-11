@@ -27,7 +27,7 @@ Magazine73 is currently under active development and is not ready for production
 
 ## Requirements
 
-- WordPress 6.5 or newer.
+- WordPress 6.6 or newer.
 - PHP 8.0 or newer.
 - Modern browser with JavaScript enabled.
 

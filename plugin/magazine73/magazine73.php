@@ -4,7 +4,7 @@
  * Plugin URI: https://73software.com/magazine73
  * Description: Create, manage, and publish digital magazines with a page-flip viewer.
  * Version: 0.1.0
- * Requires at least: 6.5
+ * Requires at least: 6.6
  * Requires PHP: 8.0
  * Author: Jonathan Torres
  * Author URI: https://73software.com
