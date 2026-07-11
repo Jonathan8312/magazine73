@@ -23,6 +23,7 @@ final class Plugin {
 		( new Post_Type() )->init();
 		( new Magazine_Meta() )->init();
 		( new Magazine_Pages() )->init();
+		( new Magazine_Pdf() )->init();
 		( new Viewer_Settings() )->init();
 		( new Shortcode() )->init();
 		( new Public_Magazine() )->init();

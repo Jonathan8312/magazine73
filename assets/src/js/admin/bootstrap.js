@@ -4,6 +4,7 @@
 
 import { markReady } from '../shared/helpers.js';
 import { initPagesPanel } from './pages-panel.js';
+import { initPdfField } from './pdf-field.js';
 import { initViewerSettingsPanel } from './viewer-settings-panel.js';
 
 /**
@@ -15,5 +16,6 @@ export function initAdmin() {
 	} );
 
 	initPagesPanel();
+	initPdfField();
 	initViewerSettingsPanel();
 }

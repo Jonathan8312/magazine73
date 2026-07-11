@@ -56,6 +56,9 @@ final class Admin_Metabox {
 		$edition    = Magazine_Meta::get_edition( $post->ID );
 		$shortcode  = Magazine_Meta::get_shortcode( $post->ID );
 		$public_url = 'publish' === $post->post_status ? Magazine_Meta::get_public_url( $post->ID ) : '';
+		$pdf        = Magazine_Pdf::get_admin_display( $post->ID );
+		$pdf_id     = $pdf['id'] ?? 0;
+		$pdf_name   = $pdf['filename'] ?? '';
 		?>
 		<p>
 			<label for="magazine73-edition"><strong><?php esc_html_e( 'Edition', 'magazine73' ); ?></strong></label>
@@ -91,6 +94,29 @@ final class Admin_Metabox {
 		<?php else : ?>
 			<p class="description"><?php esc_html_e( 'The public URL is available after the magazine is published.', 'magazine73' ); ?></p>
 		<?php endif; ?>
+		<div class="magazine73-pdf-field" data-magazine73-admin>
+			<p>
+				<strong><?php esc_html_e( 'PDF Download', 'magazine73' ); ?></strong>
+			</p>
+			<p class="description"><?php esc_html_e( 'Optional PDF file for the download control in the viewer.', 'magazine73' ); ?></p>
+			<p>
+				<span class="magazine73-pdf-field__filename" data-magazine73-pdf-filename"><?php echo esc_html( $pdf_name ); ?></span>
+			</p>
+			<p>
+				<button type="button" class="button button-secondary" data-magazine73-pdf-select>
+					<?php esc_html_e( 'Select PDF', 'magazine73' ); ?>
+				</button>
+				<button
+					type="button"
+					class="button button-link-delete"
+					data-magazine73-pdf-remove
+					<?php echo $pdf_id > 0 ? '' : 'hidden'; ?>
+				>
+					<?php esc_html_e( 'Remove PDF', 'magazine73' ); ?>
+				</button>
+			</p>
+			<input type="hidden" name="magazine73_pdf_attachment_id" value="<?php echo esc_attr( (string) $pdf_id ); ?>" data-magazine73-pdf-input />
+		</div>
 		<?php
 	}
 
@@ -130,5 +156,15 @@ final class Admin_Metabox {
 			: '';
 
 		update_post_meta( $post_id, Magazine_Meta::EDITION_META_KEY, $edition );
+
+		$pdf_attachment_id = isset( $_POST['magazine73_pdf_attachment_id'] )
+			? absint( wp_unslash( $_POST['magazine73_pdf_attachment_id'] ) )
+			: 0;
+
+		if ( $pdf_attachment_id > 0 && ! Magazine_Pdf::is_valid_pdf_attachment( $pdf_attachment_id ) ) {
+			$pdf_attachment_id = 0;
+		}
+
+		update_post_meta( $post_id, Magazine_Pdf::PDF_ATTACHMENT_META_KEY, $pdf_attachment_id );
 	}
 }
