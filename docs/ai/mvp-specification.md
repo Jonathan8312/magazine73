@@ -6,7 +6,7 @@ Magazine73 is a WordPress plugin for creating, managing and publishing digital m
 
 ## Compatibility
 
-- WordPress 6.5 or newer.
+- WordPress 6.6 or newer.
 - Tested against the latest stable WordPress release.
 - PHP 8.0 or newer.
 - Source and fallback language: English.

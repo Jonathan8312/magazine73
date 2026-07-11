@@ -30,7 +30,7 @@ final class Assets {
 	public const VIEWER_HANDLE = 'magazine73-viewer';
 
 	/**
-	 * Admin script handle.
+	 * Admin script module handle.
 	 */
 	public const ADMIN_HANDLE = 'magazine73-admin';
 
@@ -49,67 +49,50 @@ final class Assets {
 	private static array $enqueued_styles = array();
 
 	/**
-	 * Whether the admin module script tag filter is registered.
+	 * Enqueued script module identifiers.
 	 *
-	 * @var bool
+	 * @var array<string, bool>
 	 */
-	private static bool $admin_module_filter_registered = false;
+	private static array $enqueued_modules = array();
 
 	/**
 	 * Enqueue the viewer entry assets.
 	 */
 	public static function enqueue_viewer(): void {
-		if ( ! function_exists( 'wp_enqueue_script_module' ) ) {
-			return;
-		}
-
-		$resolved = self::resolve_entry_assets( self::VIEWER_ENTRY );
-
-		if ( null === $resolved ) {
-			return;
-		}
-
-		self::enqueue_stylesheets( self::VIEWER_HANDLE, $resolved['css'] );
-
-		if ( '' === $resolved['src'] ) {
-			return;
-		}
-
-		wp_enqueue_script_module(
-			self::VIEWER_HANDLE,
-			$resolved['src'],
-			array(),
-			null
-		);
+		self::enqueue_entry( self::VIEWER_HANDLE, self::VIEWER_ENTRY );
 	}
 
 	/**
 	 * Enqueue the admin entry assets.
 	 */
 	public static function enqueue_admin(): void {
-		$resolved = self::resolve_entry_assets( self::ADMIN_ENTRY );
+		self::enqueue_entry( self::ADMIN_HANDLE, self::ADMIN_ENTRY );
+	}
+
+	/**
+	 * Enqueue a built entry script module and related stylesheets.
+	 *
+	 * @param string $handle Script module handle for the entry.
+	 * @param string $entry  Manifest entry key.
+	 */
+	public static function enqueue_entry( string $handle, string $entry ): void {
+		if ( ! function_exists( 'wp_enqueue_script_module' ) ) {
+			return;
+		}
+
+		$resolved = self::resolve_entry_assets( $entry );
 
 		if ( null === $resolved ) {
 			return;
 		}
 
-		self::enqueue_stylesheets( self::ADMIN_HANDLE, $resolved['css'] );
+		self::enqueue_stylesheets( $handle, $resolved['css'] );
 
 		if ( '' === $resolved['src'] ) {
 			return;
 		}
 
-		self::register_admin_module_loader();
-
-		// phpcs:disable WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Hashed Vite filenames provide cache busting.
-		wp_enqueue_script(
-			self::ADMIN_HANDLE,
-			$resolved['src'],
-			array(),
-			null,
-			true
-		);
-		// phpcs:enable WordPress.WP.EnqueuedResourceParameters.MissingVersion
+		self::enqueue_script_module( $handle, $resolved['src'] );
 	}
 
 	/**
@@ -171,31 +154,6 @@ final class Assets {
 			'css' => array_values( $css_paths ),
 			'src' => $src,
 		);
-	}
-
-	/**
-	 * Convert Magazine73 admin script tags to ES modules on WordPress 6.5.
-	 *
-	 * WordPress 6.5 exposes Script Modules on the frontend, but admin support
-	 * arrived in WordPress 6.6. This filter is scoped to Magazine73 admin handles
-	 * so only plugin admin entry scripts are affected.
-	 *
-	 * @param string $tag    Script tag HTML.
-	 * @param string $handle Script handle.
-	 * @param string $src    Script source URL.
-	 */
-	public static function set_admin_script_type_module( string $tag, string $handle, string $src ): string {
-		unset( $src );
-
-		if ( self::ADMIN_HANDLE !== $handle ) {
-			return $tag;
-		}
-
-		if ( false !== strpos( $tag, ' type=' ) ) {
-			return $tag;
-		}
-
-		return str_replace( '<script ', '<script type="module" ', $tag );
 	}
 
 	/**
@@ -329,15 +287,24 @@ final class Assets {
 	}
 
 	/**
-	 * Register the scoped admin script tag filter once.
+	 * Enqueue a script module once.
+	 *
+	 * @param string $handle Script module handle.
+	 * @param string $src    Module source URL.
 	 */
-	private static function register_admin_module_loader(): void {
-		if ( self::$admin_module_filter_registered ) {
+	private static function enqueue_script_module( string $handle, string $src ): void {
+		if ( isset( self::$enqueued_modules[ $handle ] ) ) {
 			return;
 		}
 
-		add_filter( 'script_loader_tag', array( self::class, 'set_admin_script_type_module' ), 10, 3 );
-		self::$admin_module_filter_registered = true;
+		wp_enqueue_script_module(
+			$handle,
+			$src,
+			array(),
+			null
+		);
+
+		self::$enqueued_modules[ $handle ] = true;
 	}
 
 	/**

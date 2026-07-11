@@ -2,15 +2,15 @@
 
 ## Status
 
-Accepted
+Superseded by WordPress 6.6 minimum support
 
 ## Context
 
-Magazine73 declares WordPress 6.5 as its minimum supported version.
+Magazine73 originally declared WordPress 6.5 as its minimum supported version.
 
 Vite builds ES module entry files that import hashed chunks through relative URLs. WordPress 6.5 introduced Script Modules on the frontend through `wp_enqueue_script_module()`, but admin Script Module support was added in WordPress 6.6.
 
-The plugin must therefore load admin assets on WordPress 6.5 without relying on unavailable admin Script Module hooks.
+The plugin therefore loaded admin assets on WordPress 6.5 without relying on unavailable admin Script Module hooks.
 
 ## Decision
 
@@ -24,11 +24,15 @@ The plugin must therefore load admin assets on WordPress 6.5 without relying on 
 
 ### Positive
 
-- Preserves WordPress 6.5 compatibility for admin screens.
-- Avoids duplicate script URLs caused by registering Vite chunks separately.
-- Keeps frontend viewer integration aligned with the WordPress Script Modules API.
+- Preserved WordPress 6.5 compatibility for admin screens.
+- Avoided duplicate script URLs caused by registering Vite chunks separately.
+- Kept frontend viewer integration aligned with the WordPress Script Modules API.
 
 ### Negative
 
-- Admin and viewer use different loading mechanisms until the minimum WordPress version can be raised to 6.6 or newer.
-- The admin loader depends on a scoped script tag filter that must remain limited to Magazine73 handles.
+- Admin and viewer used different loading mechanisms until the minimum WordPress version was raised to 6.6.
+- The admin loader depended on a scoped script tag filter that had to remain limited to Magazine73 handles.
+
+## Supersession
+
+Magazine73 now requires WordPress 6.6 or newer. Viewer and admin entry scripts both use `wp_enqueue_script_module()` with the same manifest handling rules described in `docs/frontend-build.md`.
