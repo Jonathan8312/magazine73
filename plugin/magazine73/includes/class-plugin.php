@@ -19,6 +19,8 @@ final class Plugin {
 	 */
 	public function init(): void {
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
+
+		( new Post_Type() )->init();
 	}
 
 	/**
