@@ -2,6 +2,8 @@
  * Magazine admin bootstrap module.
  */
 
+import { markReady } from '../shared/helpers.js';
+
 /**
  * Initialize Magazine73 admin enhancements.
  */
@@ -12,5 +14,5 @@ export function initAdmin() {
 		return;
 	}
 
-	editor.classList.add( 'magazine73-admin--ready' );
+	markReady( editor, 'magazine73-admin--ready' );
 }

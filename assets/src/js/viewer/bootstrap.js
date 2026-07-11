@@ -2,6 +2,8 @@
  * Viewer bootstrap module.
  */
 
+import { markReady } from '../shared/helpers.js';
+
 /**
  * Initialize the Magazine73 viewer shell.
  *
@@ -15,6 +17,6 @@ export function initViewer() {
 	}
 
 	viewers.forEach( ( viewer ) => {
-		viewer.classList.add( 'magazine73-viewer--ready' );
+		markReady( viewer, 'magazine73-viewer--ready' );
 	} );
 }

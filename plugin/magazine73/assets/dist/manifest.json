@@ -1,18 +1,28 @@
 {
+  "_helpers-fXvRE6kV.js": {
+    "file": "js/helpers-fXvRE6kV.js",
+    "name": "helpers"
+  },
   "assets/src/entries/admin.js": {
-    "file": "js/magazine73-admin-BMQBuPSV.js",
+    "file": "js/magazine73-admin-DgyL5Qt_.js",
     "name": "magazine73-admin",
     "src": "assets/src/entries/admin.js",
     "isEntry": true,
+    "imports": [
+      "_helpers-fXvRE6kV.js"
+    ],
     "css": [
       "css/magazine73-admin-D_zArXk4.css"
     ]
   },
   "assets/src/entries/viewer.js": {
-    "file": "js/magazine73-viewer-0RaqKcet.js",
+    "file": "js/magazine73-viewer-CA7tTVCu.js",
     "name": "magazine73-viewer",
     "src": "assets/src/entries/viewer.js",
     "isEntry": true,
+    "imports": [
+      "_helpers-fXvRE6kV.js"
+    ],
     "css": [
       "css/magazine73-viewer-o7ancm_F.css"
     ]

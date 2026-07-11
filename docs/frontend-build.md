@@ -11,7 +11,7 @@ npm run build
 npm run validate
 ```
 
-Production assets are written to `plugin/magazine73/assets/dist/` and can be enqueued through `Magazine73\Assets`.
+Production assets are written to `plugin/magazine73/assets/dist/` and are enqueued through `Magazine73\Assets` using the WordPress 6.5 Script Modules API (`wp_enqueue_script_module()`).
 
 ## Browserslist
 
