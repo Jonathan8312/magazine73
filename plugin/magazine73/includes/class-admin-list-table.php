@@ -73,6 +73,13 @@ final class Admin_List_Table {
 	public function render_column( string $column_name, int $post_id ): void {
 		switch ( $column_name ) {
 			case self::COLUMN_COVER:
+				$cover_id = Magazine_Pages::get_cover_attachment_id( $post_id );
+
+				if ( $cover_id > 0 ) {
+					echo wp_get_attachment_image( $cover_id, array( 48, 48 ), true, array( 'class' => 'magazine73-list-cover' ) );
+					break;
+				}
+
 				echo '<span aria-hidden="true">—</span><span class="screen-reader-text">' . esc_html__( 'No cover yet', 'magazine73' ) . '</span>';
 				break;
 

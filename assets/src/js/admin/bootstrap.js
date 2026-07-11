@@ -3,16 +3,15 @@
  */
 
 import { markReady } from '../shared/helpers.js';
+import { initPagesPanel } from './pages-panel.js';
 
 /**
  * Initialize Magazine73 admin enhancements.
  */
 export function initAdmin() {
-	const editor = document.querySelector( '[data-magazine73-admin]' );
+	document.querySelectorAll( '[data-magazine73-admin]' ).forEach( ( element ) => {
+		markReady( element, 'magazine73-admin--ready' );
+	} );
 
-	if ( ! editor ) {
-		return;
-	}
-
-	markReady( editor, 'magazine73-admin--ready' );
+	initPagesPanel();
 }
