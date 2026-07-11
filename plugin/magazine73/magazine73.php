@@ -38,6 +38,9 @@ if ( ! defined( 'MAGAZINE73_BASENAME' ) ) {
 
 require_once MAGAZINE73_PATH . 'includes/class-post-type.php';
 require_once MAGAZINE73_PATH . 'includes/class-capabilities.php';
+require_once MAGAZINE73_PATH . 'includes/class-magazine-meta.php';
+require_once MAGAZINE73_PATH . 'includes/class-admin-metabox.php';
+require_once MAGAZINE73_PATH . 'includes/class-admin-list-table.php';
 require_once MAGAZINE73_PATH . 'includes/class-plugin.php';
 require_once MAGAZINE73_PATH . 'includes/class-assets.php';
 
