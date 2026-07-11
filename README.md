@@ -37,3 +37,12 @@ The local WordPress installation runs with Docker at:
 
 ```text
 http://localhost:8082
+```
+
+## Agent and CI workflow
+
+Repository automation, pull request validation, and cloud-agent workflow guidance are documented in:
+
+- `docs/ai/agent-workflow.md`
+- `docs/frontend-build.md`
+- `.github/workflows/`

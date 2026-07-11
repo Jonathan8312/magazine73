@@ -39,6 +39,7 @@ if ( ! defined( 'MAGAZINE73_BASENAME' ) ) {
 require_once MAGAZINE73_PATH . 'includes/class-post-type.php';
 require_once MAGAZINE73_PATH . 'includes/class-capabilities.php';
 require_once MAGAZINE73_PATH . 'includes/class-plugin.php';
+require_once MAGAZINE73_PATH . 'includes/class-assets.php';
 
 register_activation_hook( MAGAZINE73_FILE, array( Magazine73\Capabilities::class, 'activate' ) );
 register_deactivation_hook( MAGAZINE73_FILE, array( Magazine73\Capabilities::class, 'deactivate' ) );

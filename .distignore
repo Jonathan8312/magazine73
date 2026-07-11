@@ -1,0 +1,30 @@
+# Files excluded from production ZIP artifacts.
+# This list is used by release packaging workflows and manual distribution checks.
+
+/.cursor/
+/.github/
+/.git/
+/.gitignore
+/.gitattributes
+/.editorconfig
+/.distignore
+/AGENTS.md
+/CHANGELOG.md
+/composer.json
+/composer.lock
+/docker-compose.yml
+/docs/
+/node_modules/
+/package.json
+/package-lock.json
+/assets/
+/phpcs.xml.dist
+/phpstan.neon.dist
+/phpstan-bootstrap.php
+/README.md
+/tests/
+/vite.config.js
+/.eslintrc*
+/.prettierrc*
+/playwright.config.*
+/phpunit.xml*

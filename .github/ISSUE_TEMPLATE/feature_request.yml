@@ -1,0 +1,48 @@
+name: Feature request
+description: Propose approved MVP or follow-up functionality for Magazine73.
+title: "feat: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for scoped feature work. Confirm the request fits the current MVP backlog or has explicit approval before implementation begins.
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What outcome should this issue deliver?
+      placeholder: Add global viewer settings with per-magazine overrides.
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: List issue numbers or pull requests that must be merged first.
+      placeholder: Issue #4 completed.
+    validations:
+      required: false
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Describe the files, behaviors, and boundaries for this issue.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: List verifiable conditions that define completion.
+    validations:
+      required: true
+  - type: input
+    id: branch
+    attributes:
+      label: Branch
+      description: Branch name to use for the pull request.
+      placeholder: feature/example-feature
+    validations:
+      required: true
