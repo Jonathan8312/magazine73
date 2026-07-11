@@ -13,3 +13,4 @@ require_once MAGAZINE73_PATH . 'includes/class-magazine-pages.php';
 require_once MAGAZINE73_PATH . 'includes/class-magazine-pdf.php';
 require_once MAGAZINE73_PATH . 'includes/class-data-lifecycle.php';
 require_once MAGAZINE73_PATH . 'includes/class-magazine-renderer.php';
+require_once MAGAZINE73_PATH . 'includes/class-uninstaller.php';

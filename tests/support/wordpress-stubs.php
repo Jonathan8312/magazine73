@@ -50,14 +50,38 @@ namespace Magazine73\Tests {
 		public static array $attached_files = array();
 
 		/**
+		 * Magazine post IDs returned by get_posts().
+		 *
+		 * @var array<int, int>
+		 */
+		public static array $magazine_post_ids = array();
+
+		/**
+		 * Post IDs passed to wp_delete_post().
+		 *
+		 * @var array<int, int>
+		 */
+		public static array $deleted_post_ids = array();
+
+		/**
+		 * Options removed through delete_option().
+		 *
+		 * @var array<int, string>
+		 */
+		public static array $deleted_options = array();
+
+		/**
 		 * Reset all stubbed state.
 		 */
 		public static function reset(): void {
-			self::$options        = array();
-			self::$post_meta      = array();
-			self::$post_types     = array();
-			self::$mime_types     = array();
-			self::$attached_files = array();
+			self::$options           = array();
+			self::$post_meta         = array();
+			self::$post_types        = array();
+			self::$mime_types        = array();
+			self::$attached_files    = array();
+			self::$magazine_post_ids = array();
+			self::$deleted_post_ids  = array();
+			self::$deleted_options   = array();
 		}
 	}
 }
@@ -121,7 +145,30 @@ namespace {
 
 	if ( ! function_exists( 'delete_option' ) ) {
 		function delete_option( string $option ): bool { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
-			unset( WordPressStub::$options[ $option ] );
+			if ( array_key_exists( $option, WordPressStub::$options ) ) {
+				unset( WordPressStub::$options[ $option ] );
+				WordPressStub::$deleted_options[] = $option;
+			}
+
+			return true;
+		}
+	}
+
+	if ( ! function_exists( 'get_posts' ) ) {
+		/**
+		 * @param array<string, mixed> $args Query arguments.
+		 * @return array<int, int>
+		 */
+		function get_posts( array $args = array() ): array { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+			unset( $args );
+			return WordPressStub::$magazine_post_ids;
+		}
+	}
+
+	if ( ! function_exists( 'wp_delete_post' ) ) {
+		function wp_delete_post( int $post_id, bool $force_delete = false ): bool { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+			unset( $force_delete );
+			WordPressStub::$deleted_post_ids[] = $post_id;
 			return true;
 		}
 	}

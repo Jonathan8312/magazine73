@@ -16,7 +16,7 @@
 	<div
 		class="magazine73-viewer"
 		data-magazine73-viewer
-		data-magazine73-config='{"magazineId":1,"contentHash":"fixture","pages":[{"url":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==","width":800,"height":1200},{"url":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==","width":800,"height":1200},{"url":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==","width":800,"height":1200},{"url":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==","width":800,"height":1200}],"settings":{"colors":{"background":"#f5f5f5","controls":"#ffffff","text":""},"controls":{"previous":true,"next":true,"counter":true,"fullscreen":true,"download":false,"zoom":true,"thumbnails":true}},"dimensions":{"width":"","height":""}}'
+		data-magazine73-config='{"magazineId":1,"contentHash":"fixture","pages":[{"url":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==","width":800,"height":1200},{"url":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==","width":800,"height":1200},{"url":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==","width":800,"height":1200},{"url":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==","width":800,"height":1200}],"settings":{"colors":{"background":"#f5f5f5","controls":"#ffffff","text":""},"controls":{"previous":true,"next":true,"counter":true,"fullscreen":true,"download":true,"zoom":true,"thumbnails":true}},"dimensions":{"width":"","height":""},"download":{"url":"https://example.test/wp-content/uploads/magazine.pdf","filename":"magazine.pdf"}}'
 		data-magazine-id="1"
 		tabindex="0"
 		role="region"
@@ -28,7 +28,7 @@
 			</aside>
 			<div class="magazine73-viewer__main">
 				<div class="magazine73-viewer__canvas">
-					<div class="magazine73-viewer__loading" data-magazine73-loading aria-live="polite" hidden>
+					<div class="magazine73-viewer__loading" data-magazine73-loading aria-live="polite">
 						<p class="magazine73-viewer__loading-label" data-magazine73-loading-label data-template="Loading pages %1$d of %2$d">Loading magazine pages…</p>
 						<progress class="magazine73-viewer__loading-progress" data-magazine73-loading-progress max="100" value="0"></progress>
 					</div>
@@ -49,6 +49,31 @@
 					<button type="button" class="magazine73-controls__button" data-magazine73-action="next" aria-label="Next page">
 						<span class="magazine73-controls__icon" data-magazine73-icon="next" aria-hidden="true"></span>
 					</button>
+					<button type="button" class="magazine73-controls__button" data-magazine73-action="zoom-out" aria-label="Zoom out">
+						<span class="magazine73-controls__icon" data-magazine73-icon="zoom-out" aria-hidden="true"></span>
+					</button>
+					<button type="button" class="magazine73-controls__button" data-magazine73-action="zoom-reset" aria-label="Reset zoom">
+						<span class="magazine73-controls__icon" data-magazine73-icon="zoom-reset" aria-hidden="true"></span>
+					</button>
+					<button type="button" class="magazine73-controls__button" data-magazine73-action="zoom-in" aria-label="Zoom in">
+						<span class="magazine73-controls__icon" data-magazine73-icon="zoom-in" aria-hidden="true"></span>
+					</button>
+					<button type="button" class="magazine73-controls__button" data-magazine73-action="fullscreen" data-enter-label="Enter fullscreen" data-exit-label="Exit fullscreen" aria-label="Enter fullscreen">
+						<span class="magazine73-controls__icon" data-magazine73-icon="fullscreen-enter" aria-hidden="true"></span>
+					</button>
+					<a class="magazine73-controls__button" href="https://example.test/wp-content/uploads/magazine.pdf" download="magazine.pdf" aria-label="Download PDF">
+						<span class="magazine73-controls__icon" data-magazine73-icon="download" aria-hidden="true"></span>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="magazine73-viewer__resume" data-magazine73-resume hidden role="dialog" aria-modal="true" aria-labelledby="magazine73-resume-title">
+			<div class="magazine73-viewer__resume-panel">
+				<p id="magazine73-resume-title" class="magazine73-viewer__resume-title">Resume reading?</p>
+				<p class="magazine73-viewer__resume-message" data-magazine73-resume-message data-template="Continue from page %d or start from the cover?"></p>
+				<div class="magazine73-viewer__resume-actions">
+					<button type="button" class="magazine73-controls__button" data-magazine73-resume-action="continue">Continue reading</button>
+					<button type="button" class="magazine73-controls__button" data-magazine73-resume-action="restart">Start from cover</button>
 				</div>
 			</div>
 		</div>
