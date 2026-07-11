@@ -1,0 +1,15 @@
+{
+  "name": "magazine73",
+  "private": true,
+  "description": "Frontend build tooling for the Magazine73 WordPress plugin.",
+  "license": "GPL-2.0-or-later",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "validate": "npm run build"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  }
+}

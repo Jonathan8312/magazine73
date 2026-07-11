@@ -37,5 +37,6 @@ if ( ! defined( 'MAGAZINE73_BASENAME' ) ) {
 }
 
 require_once MAGAZINE73_PATH . 'includes/class-plugin.php';
+require_once MAGAZINE73_PATH . 'includes/class-assets.php';
 
 ( new Magazine73\Plugin() )->init();
