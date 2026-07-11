@@ -27,6 +27,13 @@ final class Admin_Assets {
 	 * @param string $hook_suffix Current admin page hook suffix.
 	 */
 	public function enqueue( string $hook_suffix ): void {
+		$settings_hook = Post_Type::POST_TYPE . '_page_' . Admin_Settings_Page::PAGE_SLUG;
+
+		if ( $settings_hook === $hook_suffix ) {
+			Assets::enqueue_admin();
+			return;
+		}
+
 		if ( ! in_array( $hook_suffix, array( 'post.php', 'post-new.php' ), true ) ) {
 			return;
 		}

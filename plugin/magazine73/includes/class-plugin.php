@@ -23,8 +23,11 @@ final class Plugin {
 		( new Post_Type() )->init();
 		( new Magazine_Meta() )->init();
 		( new Magazine_Pages() )->init();
+		( new Viewer_Settings() )->init();
 		( new Admin_Metabox() )->init();
 		( new Admin_Pages_Panel() )->init();
+		( new Admin_Viewer_Settings_Metabox() )->init();
+		( new Admin_Settings_Page() )->init();
 		( new Admin_Assets() )->init();
 		( new Admin_List_Table() )->init();
 	}

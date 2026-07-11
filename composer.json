@@ -23,7 +23,7 @@
   },
   "scripts": {
     "phpcs": "phpcs",
-    "phpstan": "phpstan analyse --configuration=phpstan.neon.dist --memory-limit=512M",
+    "phpstan": "phpstan analyse --configuration=phpstan.neon.dist --memory-limit=1G",
     "audit": "composer audit --locked --no-interaction"
   }
 }
