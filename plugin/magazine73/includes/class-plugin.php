@@ -25,6 +25,7 @@ final class Plugin {
 		( new Magazine_Pages() )->init();
 		( new Magazine_Pdf() )->init();
 		( new Viewer_Settings() )->init();
+		( new Data_Lifecycle() )->init();
 		( new Shortcode() )->init();
 		( new Public_Magazine() )->init();
 		( new Admin_Metabox() )->init();

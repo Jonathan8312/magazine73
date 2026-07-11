@@ -52,6 +52,8 @@ require_once MAGAZINE73_PATH . 'includes/class-admin-viewer-settings-metabox.php
 require_once MAGAZINE73_PATH . 'includes/class-admin-settings-page.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-assets.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-list-table.php';
+require_once MAGAZINE73_PATH . 'includes/class-data-lifecycle.php';
+require_once MAGAZINE73_PATH . 'includes/class-uninstaller.php';
 require_once MAGAZINE73_PATH . 'includes/class-plugin.php';
 require_once MAGAZINE73_PATH . 'includes/class-assets.php';
 

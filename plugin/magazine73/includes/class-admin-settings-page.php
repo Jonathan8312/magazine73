@@ -94,6 +94,31 @@ final class Admin_Settings_Page {
 				)
 			);
 		}
+
+		register_setting(
+			Viewer_Settings::SETTINGS_GROUP,
+			Data_Lifecycle::DELETE_ON_UNINSTALL_OPTION,
+			array(
+				'type'              => 'boolean',
+				'sanitize_callback' => array( Data_Lifecycle::class, 'sanitize_delete_on_uninstall' ),
+				'default'           => false,
+			)
+		);
+
+		add_settings_section(
+			'magazine73_data_lifecycle',
+			__( 'Data & Uninstall', 'magazine73' ),
+			array( $this, 'render_data_lifecycle_section' ),
+			self::PAGE_SLUG
+		);
+
+		add_settings_field(
+			'magazine73_delete_data_on_uninstall',
+			__( 'Delete plugin data on uninstall', 'magazine73' ),
+			array( $this, 'render_delete_on_uninstall_field' ),
+			self::PAGE_SLUG,
+			'magazine73_data_lifecycle'
+		);
 	}
 
 	/**
@@ -133,6 +158,34 @@ final class Admin_Settings_Page {
 	 */
 	public function render_controls_section(): void {
 		echo '<p>' . esc_html__( 'Choose which viewer controls are visible by default.', 'magazine73' ) . '</p>';
+	}
+
+	/**
+	 * Render the data lifecycle section description.
+	 */
+	public function render_data_lifecycle_section(): void {
+		echo '<p>' . esc_html__( 'Control whether Magazine73-owned database content is removed when the plugin is deleted. Media Library files are never deleted.', 'magazine73' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Multisite: uninstall cleanup runs only for the site where the plugin is deleted.', 'magazine73' ) . '</p>';
+	}
+
+	/**
+	 * Render the delete-on-uninstall checkbox.
+	 */
+	public function render_delete_on_uninstall_field(): void {
+		$checked  = Data_Lifecycle::should_delete_on_uninstall();
+		$field_id = 'magazine73-delete-data-on-uninstall';
+		?>
+		<label for="<?php echo esc_attr( $field_id ); ?>">
+			<input
+				type="checkbox"
+				id="<?php echo esc_attr( $field_id ); ?>"
+				name="<?php echo esc_attr( Data_Lifecycle::DELETE_ON_UNINSTALL_OPTION ); ?>"
+				value="1"
+				<?php checked( $checked ); ?>
+			/>
+			<?php esc_html_e( 'Remove magazines, metadata, and plugin settings when uninstalling Magazine73.', 'magazine73' ); ?>
+		</label>
+		<?php
 	}
 
 	/**

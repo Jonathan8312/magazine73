@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-11T02:25:23+00:00\n"
+"POT-Creation-Date: 2026-07-11T02:34:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: magazine73\n"
@@ -167,7 +167,7 @@ msgid "Add or Upload Pages"
 msgstr ""
 
 #: includes/class-admin-settings-page.php:36
-#: includes/class-admin-settings-page.php:109
+#: includes/class-admin-settings-page.php:134
 msgid "Magazine Settings"
 msgstr ""
 
@@ -185,75 +185,95 @@ msgstr ""
 msgid "Visible Controls"
 msgstr ""
 
-#: includes/class-admin-settings-page.php:104
+#: includes/class-admin-settings-page.php:110
+msgid "Data & Uninstall"
+msgstr ""
+
+#: includes/class-admin-settings-page.php:117
+msgid "Delete plugin data on uninstall"
+msgstr ""
+
+#: includes/class-admin-settings-page.php:129
 msgid "You do not have permission to access these settings."
 msgstr ""
 
-#: includes/class-admin-settings-page.php:111
+#: includes/class-admin-settings-page.php:136
 msgid "Configure neutral global defaults for the magazine viewer. Magazines can inherit these settings or override them individually."
 msgstr ""
 
-#: includes/class-admin-settings-page.php:128
+#: includes/class-admin-settings-page.php:153
 msgid "Choose neutral colors for the viewer shell and controls. Leave text color empty to inherit typography from the active theme."
 msgstr ""
 
-#: includes/class-admin-settings-page.php:135
+#: includes/class-admin-settings-page.php:160
 msgid "Choose which viewer controls are visible by default."
 msgstr ""
 
-#: includes/class-admin-settings-page.php:160
+#: includes/class-admin-settings-page.php:167
+msgid "Control whether Magazine73-owned database content is removed when the plugin is deleted. Media Library files are never deleted."
+msgstr ""
+
+#: includes/class-admin-settings-page.php:168
+msgid "Multisite: uninstall cleanup runs only for the site where the plugin is deleted."
+msgstr ""
+
+#: includes/class-admin-settings-page.php:186
+msgid "Remove magazines, metadata, and plugin settings when uninstalling Magazine73."
+msgstr ""
+
+#: includes/class-admin-settings-page.php:213
 #: includes/class-admin-viewer-settings-metabox.php:97
 msgid "Inherit from theme"
 msgstr ""
 
-#: includes/class-admin-settings-page.php:201
+#: includes/class-admin-settings-page.php:254
 #: includes/class-admin-viewer-settings-metabox.php:207
 msgid "Viewer background"
 msgstr ""
 
-#: includes/class-admin-settings-page.php:202
+#: includes/class-admin-settings-page.php:255
 #: includes/class-admin-viewer-settings-metabox.php:208
 msgid "Control buttons"
 msgstr ""
 
-#: includes/class-admin-settings-page.php:203
+#: includes/class-admin-settings-page.php:256
 #: includes/class-admin-viewer-settings-metabox.php:209
 msgid "Viewer text"
 msgstr ""
 
-#: includes/class-admin-settings-page.php:216
+#: includes/class-admin-settings-page.php:269
 #: includes/class-admin-viewer-settings-metabox.php:222
 #: templates/viewer.php:105
 msgid "Previous page"
 msgstr ""
 
-#: includes/class-admin-settings-page.php:217
+#: includes/class-admin-settings-page.php:270
 #: includes/class-admin-viewer-settings-metabox.php:223
 #: templates/viewer.php:118
 msgid "Next page"
 msgstr ""
 
-#: includes/class-admin-settings-page.php:218
+#: includes/class-admin-settings-page.php:271
 #: includes/class-admin-viewer-settings-metabox.php:224
 msgid "Page counter"
 msgstr ""
 
-#: includes/class-admin-settings-page.php:219
+#: includes/class-admin-settings-page.php:272
 #: includes/class-admin-viewer-settings-metabox.php:225
 msgid "Fullscreen"
 msgstr ""
 
-#: includes/class-admin-settings-page.php:220
+#: includes/class-admin-settings-page.php:273
 #: includes/class-admin-viewer-settings-metabox.php:226
 msgid "PDF download"
 msgstr ""
 
-#: includes/class-admin-settings-page.php:221
+#: includes/class-admin-settings-page.php:274
 #: includes/class-admin-viewer-settings-metabox.php:227
 msgid "Zoom"
 msgstr ""
 
-#: includes/class-admin-settings-page.php:222
+#: includes/class-admin-settings-page.php:275
 #: includes/class-admin-viewer-settings-metabox.php:228
 msgid "Thumbnails"
 msgstr ""
