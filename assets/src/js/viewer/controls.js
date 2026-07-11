@@ -10,6 +10,7 @@ import zoomResetIcon from '../../icons/zoom-reset.svg?raw';
 import fullscreenEnterIcon from '../../icons/fullscreen-enter.svg?raw';
 import fullscreenExitIcon from '../../icons/fullscreen-exit.svg?raw';
 import thumbnailsIcon from '../../icons/thumbnails.svg?raw';
+import { sanitizeImageUrl } from './page-loader.js';
 
 const ICONS = {
 	prev: prevIcon,
@@ -25,29 +26,6 @@ const ICONS = {
 const ZOOM_MIN = 1;
 const ZOOM_MAX = 2;
 const ZOOM_STEP = 0.25;
-
-/**
- * Validate an image source before DOM assignment.
- *
- * @param {string} url Candidate image URL.
- */
-function isAllowedImageSource( url ) {
-	if ( 'string' !== typeof url || '' === url ) {
-		return false;
-	}
-
-	if ( url.startsWith( 'data:image/' ) ) {
-		return true;
-	}
-
-	try {
-		const parsed = new URL( url, window.location.origin );
-
-		return 'http:' === parsed.protocol || 'https:' === parsed.protocol;
-	} catch {
-		return false;
-	}
-}
 
 /**
  * Inject SVG icons into control buttons.
@@ -228,9 +206,11 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 				item.dataset.pageIndex = String( index );
 
 				const image = document.createElement( 'img' );
-				const thumbnailUrl = pageLoader?.resolvedUrls?.[ index ] || page.url;
+				const thumbnailUrl = pageLoader
+					? sanitizeImageUrl( pageLoader.getResolvedUrls()[ index ] )
+					: null;
 
-				if ( ! isAllowedImageSource( thumbnailUrl ) ) {
+				if ( ! thumbnailUrl ) {
 					return;
 				}
 

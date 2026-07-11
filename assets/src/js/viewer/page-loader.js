@@ -9,23 +9,28 @@ const NEARBY_PRIORITY_RADIUS = 4;
  * Validate an image source before DOM assignment.
  *
  * @param {string} url Candidate image URL.
+ * @return {string|null} Sanitized URL or null when invalid.
  */
-function isAllowedImageSource( url ) {
+export function sanitizeImageUrl( url ) {
 	if ( 'string' !== typeof url || '' === url ) {
-		return false;
+		return null;
 	}
 
 	if ( url.startsWith( 'data:image/' ) ) {
-		return true;
+		return url;
 	}
 
 	try {
 		const parsed = new URL( url, window.location.origin );
 
-		return 'http:' === parsed.protocol || 'https:' === parsed.protocol;
+		if ( 'http:' === parsed.protocol || 'https:' === parsed.protocol ) {
+			return parsed.href;
+		}
 	} catch {
-		return false;
+		return null;
 	}
+
+	return null;
 }
 
 /**
@@ -232,12 +237,14 @@ export class PageLoader {
 			image.addEventListener( 'load', () => finish( true ) );
 			image.addEventListener( 'error', () => finish( false ) );
 
-			if ( ! isAllowedImageSource( page.url ) ) {
+			const safeUrl = sanitizeImageUrl( page.url );
+
+			if ( ! safeUrl ) {
 				finish( false );
 				return;
 			}
 
-			image.setAttribute( 'src', page.url );
+			image.setAttribute( 'src', safeUrl );
 
 			if ( image.complete ) {
 				finish( true );
