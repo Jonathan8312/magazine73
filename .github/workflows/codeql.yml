@@ -27,12 +27,36 @@ jobs:
 
       - name: Detect JavaScript or TypeScript sources
         id: sources
+        shell: bash
         run: |
-          if find . -type f \( -name '*.js' -o -name '*.ts' -o -name '*.jsx' -o -name '*.tsx' \) \
-            ! -path './node_modules/*' \
-            ! -path './vendor/*' \
-            | grep -q .; then
+          set -euo pipefail
+
+          mapfile -t SOURCE_FILES < <(
+            find . -type f \( \
+              -name '*.cjs' -o \
+              -name '*.js' -o \
+              -name '*.jsx' -o \
+              -name '*.mjs' -o \
+              -name '*.ts' -o \
+              -name '*.tsx' \
+            \) \
+              ! -path './.git/*' \
+              ! -path './node_modules/*' \
+              ! -path './vendor/*' \
+              ! -path './dist/*' \
+              ! -path './build/*' \
+              ! -path './coverage/*' \
+              ! -path './third-party/*' \
+              ! -path './plugin/magazine73/third-party/*' \
+              | sort
+          )
+
+          if ((${#SOURCE_FILES[@]} > 0)); then
             echo "enabled=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "### Supported source files detected"
+              printf '%s\n' "${SOURCE_FILES[@]}"
+            } >> "$GITHUB_STEP_SUMMARY"
           else
             echo "enabled=false" >> "$GITHUB_OUTPUT"
           fi
@@ -51,6 +75,13 @@ jobs:
         if: steps.sources.outputs.enabled == 'true'
         uses: github/codeql-action/analyze@v3
 
-      - name: Skip analysis when frontend sources are absent
+      - name: Skip analysis when no supported sources exist
         if: steps.sources.outputs.enabled == 'false'
-        run: echo "No JavaScript or TypeScript sources found. Skipping CodeQL until frontend tooling is added."
+        shell: bash
+        run: |
+          {
+            echo "CodeQL status: skipped (informational)"
+            echo "No supported JavaScript or TypeScript source files were found."
+            echo "Excluded paths: .git/, node_modules/, vendor/, dist/, build/, coverage/, third-party/."
+            echo "CodeQL remains configured for javascript-typescript and will run automatically once frontend source files are added."
+          } | tee -a "$GITHUB_STEP_SUMMARY"
