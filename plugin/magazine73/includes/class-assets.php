@@ -30,7 +30,7 @@ final class Assets {
 	public const VIEWER_HANDLE = 'magazine73-viewer';
 
 	/**
-	 * Admin script module handle.
+	 * Admin script handle.
 	 */
 	public const ADMIN_HANDLE = 'magazine73-admin';
 
@@ -49,70 +49,67 @@ final class Assets {
 	private static array $enqueued_styles = array();
 
 	/**
-	 * Enqueued script module identifiers.
+	 * Whether the admin module script tag filter is registered.
 	 *
-	 * @var array<string, bool>
+	 * @var bool
 	 */
-	private static array $enqueued_modules = array();
+	private static bool $admin_module_filter_registered = false;
 
 	/**
 	 * Enqueue the viewer entry assets.
 	 */
 	public static function enqueue_viewer(): void {
-		self::enqueue_entry( self::VIEWER_HANDLE, self::VIEWER_ENTRY );
+		if ( ! function_exists( 'wp_enqueue_script_module' ) ) {
+			return;
+		}
+
+		$resolved = self::resolve_entry_assets( self::VIEWER_ENTRY );
+
+		if ( null === $resolved ) {
+			return;
+		}
+
+		self::enqueue_stylesheets( self::VIEWER_HANDLE, $resolved['css'] );
+
+		if ( '' === $resolved['src'] ) {
+			return;
+		}
+
+		wp_enqueue_script_module(
+			self::VIEWER_HANDLE,
+			$resolved['src'],
+			array(),
+			null
+		);
 	}
 
 	/**
 	 * Enqueue the admin entry assets.
 	 */
 	public static function enqueue_admin(): void {
-		self::enqueue_entry( self::ADMIN_HANDLE, self::ADMIN_ENTRY );
-	}
-
-	/**
-	 * Register a built entry, its imported modules, and stylesheet dependencies.
-	 *
-	 * @param string $handle Script module handle for the entry.
-	 * @param string $entry  Manifest entry key.
-	 */
-	public static function enqueue_entry( string $handle, string $entry ): void {
-		if ( ! function_exists( 'wp_enqueue_script_module' ) ) {
-			return;
-		}
-
-		$resolved = self::resolve_entry( $entry );
+		$resolved = self::resolve_entry_assets( self::ADMIN_ENTRY );
 
 		if ( null === $resolved ) {
 			return;
 		}
 
-		foreach ( $resolved['css'] as $index => $stylesheet_path ) {
-			self::enqueue_stylesheet( $handle, $stylesheet_path, (int) $index );
-		}
+		self::enqueue_stylesheets( self::ADMIN_HANDLE, $resolved['css'] );
 
-		foreach ( $resolved['modules'] as $module_key => $module ) {
-			if ( $module_key === $resolved['entry_key'] ) {
-				continue;
-			}
-
-			self::enqueue_script_module(
-				$module['id'],
-				$module['src'],
-				$module['deps']
-			);
-		}
-
-		$entry_module = $resolved['modules'][ $resolved['entry_key'] ] ?? null;
-
-		if ( null === $entry_module ) {
+		if ( '' === $resolved['src'] ) {
 			return;
 		}
 
-		self::enqueue_script_module(
-			$handle,
-			$entry_module['src'],
-			$entry_module['deps']
+		self::register_admin_module_loader();
+
+		// phpcs:disable WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Hashed Vite filenames provide cache busting.
+		wp_enqueue_script(
+			self::ADMIN_HANDLE,
+			$resolved['src'],
+			array(),
+			null,
+			true
 		);
+		// phpcs:enable WordPress.WP.EnqueuedResourceParameters.MissingVersion
 	}
 
 	/**
@@ -134,16 +131,15 @@ final class Assets {
 	}
 
 	/**
-	 * Resolve an entry and its imported manifest dependencies.
+	 * Resolve stylesheet dependencies and the entry script URL.
+	 *
+	 * Imported Vite chunks are not enqueued separately. The entry script loads
+	 * generated chunks through native relative ES module imports.
 	 *
 	 * @param string $entry_key Manifest entry key.
-	 * @return array{
-	 *     entry_key: string,
-	 *     css: string[],
-	 *     modules: array<string, array{id: string, src: string, deps: array<int|string, array{id: string, import?: string}>}>
-	 * }|null
+	 * @return array{css: string[], src: string}|null
 	 */
-	public static function resolve_entry( string $entry_key ): ?array {
+	public static function resolve_entry_assets( string $entry_key ): ?array {
 		$manifest = self::get_manifest();
 
 		if ( ! isset( $manifest[ $entry_key ] ) || ! is_array( $manifest[ $entry_key ] ) ) {
@@ -152,33 +148,54 @@ final class Assets {
 
 		$visited   = array();
 		$css_paths = array();
-		$modules   = array();
 
-		self::collect_manifest_entry(
+		self::collect_stylesheets_for_entry(
 			$entry_key,
 			$manifest,
 			$visited,
-			$css_paths,
-			$modules
+			$css_paths
 		);
 
-		if ( ! isset( $modules[ $entry_key ] ) ) {
+		$entry = $manifest[ $entry_key ];
+		$src   = '';
+
+		if ( isset( $entry['file'] ) && is_string( $entry['file'] ) && '' !== $entry['file'] ) {
+			$src = self::build_asset_url( $entry['file'] );
+		}
+
+		if ( '' === $src && empty( $css_paths ) ) {
 			return null;
 		}
 
-		foreach ( $modules as $module_key => $module ) {
-			$modules[ $module_key ]['deps'] = self::get_module_dependencies(
-				$module_key,
-				$manifest,
-				$modules
-			);
+		return array(
+			'css' => array_values( $css_paths ),
+			'src' => $src,
+		);
+	}
+
+	/**
+	 * Convert Magazine73 admin script tags to ES modules on WordPress 6.5.
+	 *
+	 * WordPress 6.5 exposes Script Modules on the frontend, but admin support
+	 * arrived in WordPress 6.6. This filter is scoped to Magazine73 admin handles
+	 * so only plugin admin entry scripts are affected.
+	 *
+	 * @param string $tag    Script tag HTML.
+	 * @param string $handle Script handle.
+	 * @param string $src    Script source URL.
+	 */
+	public static function set_admin_script_type_module( string $tag, string $handle, string $src ): string {
+		unset( $src );
+
+		if ( self::ADMIN_HANDLE !== $handle ) {
+			return $tag;
 		}
 
-		return array(
-			'entry_key' => $entry_key,
-			'css'       => array_values( $css_paths ),
-			'modules'   => $modules,
-		);
+		if ( false !== strpos( $tag, ' type=' ) ) {
+			return $tag;
+		}
+
+		return str_replace( '<script ', '<script type="module" ', $tag );
 	}
 
 	/**
@@ -218,20 +235,18 @@ final class Assets {
 	}
 
 	/**
-	 * Recursively collect CSS and module data for a manifest entry.
+	 * Recursively collect stylesheet paths for a manifest entry tree.
 	 *
-	 * @param string                                                                                                     $entry_key Manifest entry key.
-	 * @param array<string, mixed>                                                                                       $manifest  Manifest data.
-	 * @param array<string, bool>                                                                                        $visited   Visited entry keys.
-	 * @param array<string, bool>                                                                                        $css_paths Stylesheet paths keyed by relative path.
-	 * @param array<string, array{id: string, src: string, deps: array<int|string, array{id: string, import?: string}>}> $modules Module data keyed by manifest entry.
+	 * @param string              $entry_key Manifest entry key.
+	 * @param array<string,mixed> $manifest  Manifest data.
+	 * @param array<string,bool>  $visited   Visited entry keys.
+	 * @param array<string,bool>  $css_paths Stylesheet paths keyed by relative path.
 	 */
-	private static function collect_manifest_entry(
+	private static function collect_stylesheets_for_entry(
 		string $entry_key,
 		array $manifest,
 		array &$visited,
-		array &$css_paths,
-		array &$modules
+		array &$css_paths
 	): void {
 		if ( isset( $visited[ $entry_key ] ) ) {
 			return;
@@ -251,89 +266,42 @@ final class Assets {
 					continue;
 				}
 
-				self::collect_manifest_entry(
+				self::collect_stylesheets_for_entry(
 					$import_key,
 					$manifest,
 					$visited,
-					$css_paths,
-					$modules
+					$css_paths
 				);
 			}
 		}
 
-		if ( isset( $entry['css'] ) && is_array( $entry['css'] ) ) {
-			foreach ( $entry['css'] as $stylesheet ) {
-				if ( ! is_string( $stylesheet ) || '' === $stylesheet ) {
-					continue;
-				}
+		if ( ! isset( $entry['css'] ) || ! is_array( $entry['css'] ) ) {
+			return;
+		}
 
-				$stylesheet_path = self::build_asset_path( $stylesheet );
+		foreach ( $entry['css'] as $stylesheet ) {
+			if ( ! is_string( $stylesheet ) || '' === $stylesheet ) {
+				continue;
+			}
 
-				if ( '' !== $stylesheet_path ) {
-					$css_paths[ $stylesheet_path ] = true;
-				}
+			$stylesheet_path = self::build_asset_path( $stylesheet );
+
+			if ( '' !== $stylesheet_path ) {
+				$css_paths[ $stylesheet_path ] = true;
 			}
 		}
-
-		if ( ! isset( $entry['file'] ) || ! is_string( $entry['file'] ) || '' === $entry['file'] ) {
-			return;
-		}
-
-		$module_src = self::build_asset_url( $entry['file'] );
-
-		if ( '' === $module_src ) {
-			return;
-		}
-
-		$modules[ $entry_key ] = array(
-			'id'   => self::get_module_id( $entry_key ),
-			'src'  => $module_src,
-			'deps' => array(),
-		);
 	}
 
 	/**
-	 * Resolve imported module dependencies for a manifest entry.
+	 * Enqueue deduplicated stylesheets for an asset group.
 	 *
-	 * @param string                                                                                                     $entry_key Manifest entry key.
-	 * @param array<string, mixed>                                                                                       $manifest  Manifest data.
-	 * @param array<string, array{id: string, src: string, deps: array<int|string, array{id: string, import?: string}>}> $modules   Collected modules.
-	 * @return array<int|string, array{id: string, import?: string}>
+	 * @param string   $handle_prefix Handle prefix.
+	 * @param string[] $css_paths     Stylesheet paths relative to the plugin root.
 	 */
-	private static function get_module_dependencies(
-		string $entry_key,
-		array $manifest,
-		array $modules
-	): array {
-		if ( ! isset( $manifest[ $entry_key ] ) || ! is_array( $manifest[ $entry_key ] ) ) {
-			return array();
+	private static function enqueue_stylesheets( string $handle_prefix, array $css_paths ): void {
+		foreach ( $css_paths as $index => $path ) {
+			self::enqueue_stylesheet( $handle_prefix, $path, (int) $index );
 		}
-
-		$entry = $manifest[ $entry_key ];
-
-		if ( ! isset( $entry['imports'] ) || ! is_array( $entry['imports'] ) ) {
-			return array();
-		}
-
-		$dependencies = array();
-
-		foreach ( $entry['imports'] as $import_key ) {
-			if ( ! is_string( $import_key ) || '' === $import_key ) {
-				continue;
-			}
-
-			if ( ! isset( $modules[ $import_key ] ) ) {
-				continue;
-			}
-
-			$module_id = $modules[ $import_key ]['id'];
-
-			$dependencies[ $module_id ] = array(
-				'id' => $module_id,
-			);
-		}
-
-		return array_values( $dependencies );
 	}
 
 	/**
@@ -361,25 +329,15 @@ final class Assets {
 	}
 
 	/**
-	 * Enqueue a script module once.
-	 *
-	 * @param string                                                $id   Script module identifier.
-	 * @param string                                                $src  Module source URL.
-	 * @param array<int|string, array{id: string, import?: string}> $deps Module dependencies.
+	 * Register the scoped admin script tag filter once.
 	 */
-	private static function enqueue_script_module( string $id, string $src, array $deps ): void {
-		if ( isset( self::$enqueued_modules[ $id ] ) ) {
+	private static function register_admin_module_loader(): void {
+		if ( self::$admin_module_filter_registered ) {
 			return;
 		}
 
-		wp_enqueue_script_module(
-			$id,
-			$src,
-			$deps,
-			MAGAZINE73_VERSION
-		);
-
-		self::$enqueued_modules[ $id ] = true;
+		add_filter( 'script_loader_tag', array( self::class, 'set_admin_script_type_module' ), 10, 3 );
+		self::$admin_module_filter_registered = true;
 	}
 
 	/**
@@ -410,14 +368,5 @@ final class Assets {
 		}
 
 		return MAGAZINE73_URL . $asset_path;
-	}
-
-	/**
-	 * Build a stable script module identifier for a manifest entry.
-	 *
-	 * @param string $entry_key Manifest entry key.
-	 */
-	private static function get_module_id( string $entry_key ): string {
-		return 'magazine73-module-' . substr( md5( $entry_key ), 0, 12 );
 	}
 }
