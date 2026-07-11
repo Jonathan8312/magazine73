@@ -49,19 +49,20 @@ final class Magazine_Renderer {
 
 		Assets::enqueue_viewer();
 
-		$settings   = self::resolve_settings( $magazine_id, $shortcode_atts );
-		$dimensions = self::resolve_dimensions( $shortcode_atts );
+		$settings      = self::resolve_settings( $magazine_id, $shortcode_atts );
+		$dimensions    = self::resolve_dimensions( $shortcode_atts );
+		$viewer_config = self::build_viewer_config( $magazine_id, $settings, $dimensions );
 
 		ob_start();
 
 		Template_Loader::load_template(
 			'viewer.php',
 			array(
-				'magazine'   => $magazine,
-				'settings'   => $settings,
-				'page_count' => count( $page_ids ),
-				'width'      => $dimensions['width'],
-				'height'     => $dimensions['height'],
+				'magazine'      => $magazine,
+				'settings'      => $settings,
+				'viewer_config' => $viewer_config,
+				'width'         => $dimensions['width'],
+				'height'        => $dimensions['height'],
 			)
 		);
 
@@ -110,6 +111,23 @@ final class Magazine_Renderer {
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * Build viewer configuration for the frontend integration layer.
+	 *
+	 * @param int                                                                                                     $magazine_id Magazine post ID.
+	 * @param array{colors: array{background: string, controls: string, text: string}, controls: array<string, bool>} $settings    Resolved viewer settings.
+	 * @param array{width: string, height: string}                                                                    $dimensions  Optional viewer dimensions.
+	 * @return array{magazineId: int, pages: array<int, array{url: string, width: int, height: int, blank?: bool}>, settings: array{colors: array{background: string, controls: string, text: string}, controls: array<string, bool>}, dimensions: array{width: string, height: string}}
+	 */
+	public static function build_viewer_config( int $magazine_id, array $settings, array $dimensions ): array {
+		return array(
+			'magazineId' => $magazine_id,
+			'pages'      => Magazine_Pages::get_viewer_pages( $magazine_id ),
+			'settings'   => $settings,
+			'dimensions' => $dimensions,
+		);
 	}
 
 	/**

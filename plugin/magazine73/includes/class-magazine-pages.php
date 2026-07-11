@@ -195,6 +195,67 @@ final class Magazine_Pages {
 	}
 
 	/**
+	 * Build viewer page data for the public flipbook.
+	 *
+	 * @param int $post_id Magazine post ID.
+	 * @return array<int, array{url: string, width: int, height: int, blank?: bool}>
+	 */
+	public static function get_viewer_pages( int $post_id ): array {
+		$pages = array();
+
+		foreach ( self::get_page_items( $post_id ) as $item ) {
+			if ( '' === $item['url'] ) {
+				continue;
+			}
+
+			$dimensions = self::get_attachment_dimensions( $item['id'] );
+
+			$pages[] = array(
+				'url'    => $item['url'],
+				'width'  => $dimensions['width'],
+				'height' => $dimensions['height'],
+			);
+		}
+
+		if ( 0 !== count( $pages ) % 2 ) {
+			return $pages;
+		}
+
+		$cover = $pages[0];
+
+		$pages[] = array(
+			'url'    => '',
+			'width'  => $cover['width'],
+			'height' => $cover['height'],
+			'blank'  => true,
+		);
+
+		return $pages;
+	}
+
+	/**
+	 * Get attachment dimensions with a neutral fallback ratio.
+	 *
+	 * @param int $attachment_id Attachment ID.
+	 * @return array{width: int, height: int}
+	 */
+	private static function get_attachment_dimensions( int $attachment_id ): array {
+		$metadata = wp_get_attachment_metadata( $attachment_id );
+
+		if ( is_array( $metadata ) && ! empty( $metadata['width'] ) && ! empty( $metadata['height'] ) ) {
+			return array(
+				'width'  => (int) $metadata['width'],
+				'height' => (int) $metadata['height'],
+			);
+		}
+
+		return array(
+			'width'  => 3,
+			'height' => 4,
+		);
+	}
+
+	/**
 	 * Keep only valid WebP attachment IDs.
 	 *
 	 * @param int[] $attachment_ids Attachment IDs.

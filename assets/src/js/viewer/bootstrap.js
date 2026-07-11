@@ -3,20 +3,55 @@
  */
 
 import { markReady } from '../shared/helpers.js';
+import { bindViewerNavigation, createPageFlipViewer } from './stpageflip-viewer.js';
 
 /**
- * Initialize the Magazine73 viewer shell.
+ * Parse viewer configuration from a data attribute.
  *
- * The full StPageFlip integration is added in a later issue.
+ * @param {HTMLElement} viewerElement Viewer root element.
+ */
+function parseViewerConfig( viewerElement ) {
+	const configValue = viewerElement.getAttribute( 'data-magazine73-config' );
+
+	if ( ! configValue ) {
+		return null;
+	}
+
+	try {
+		return JSON.parse( configValue );
+	} catch {
+		return null;
+	}
+}
+
+/**
+ * Initialize Magazine73 viewers on the current page.
  */
 export function initViewer() {
 	const viewers = document.querySelectorAll( '[data-magazine73-viewer]' );
 
-	if ( viewers.length === 0 ) {
+	if ( 0 === viewers.length ) {
 		return;
 	}
 
-	viewers.forEach( ( viewer ) => {
-		markReady( viewer, 'magazine73-viewer--ready' );
+	viewers.forEach( ( viewerElement ) => {
+		if ( ! ( viewerElement instanceof HTMLElement ) ) {
+			return;
+		}
+
+		const config = parseViewerConfig( viewerElement );
+
+		if ( ! config ) {
+			return;
+		}
+
+		const pageFlip = createPageFlipViewer( viewerElement, config );
+
+		if ( ! pageFlip ) {
+			return;
+		}
+
+		bindViewerNavigation( viewerElement, pageFlip );
+		markReady( viewerElement, 'magazine73-viewer--ready' );
 	} );
 }

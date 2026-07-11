@@ -31,6 +31,12 @@ Magazine73 is currently under active development and is not ready for production
 - PHP 8.0 or newer.
 - Modern browser with JavaScript enabled.
 
+## Third-party components
+
+Runtime third-party libraries are vendored locally inside the plugin. See
+`plugin/magazine73/third-party/README.md` for project names, versions, sources,
+authors, and licenses.
+
 ## Development environment
 
 The local WordPress installation runs with Docker at:
