@@ -2,6 +2,8 @@
  * Magazine pages panel interactions.
  */
 
+import { __, sprintf } from '@wordpress/i18n';
+
 const LARGE_PAGE_BYTES = 307200;
 
 /**
@@ -22,9 +24,9 @@ export function initPagesPanel() {
 	}
 
 	const frame = window.wp.media( {
-		title: 'Select WebP Pages',
+		title: __( 'Select WebP Pages', 'magazine73' ),
 		button: {
-			text: 'Use selected pages',
+			text: __( 'Use selected pages', 'magazine73' ),
 		},
 		library: {
 			type: 'image/webp',
@@ -96,19 +98,37 @@ function createPageItem( attachment ) {
 	item.className = `magazine73-pages-panel__item${ isLarge ? ' magazine73-pages-panel__item--large' : '' }`;
 	item.dataset.attachmentId = id;
 
-	item.innerHTML = `
-		${ thumbUrl ? `<img class="magazine73-pages-panel__thumb" src="${ thumbUrl }" alt="" />` : '' }
-		<span class="magazine73-pages-panel__filename"></span>
-		${ isLarge ? '<span class="magazine73-pages-panel__warning">Larger than 300 KB</span>' : '' }
-		<button type="button" class="button-link-delete magazine73-pages-panel__remove">Remove</button>
-		<input type="hidden" name="magazine73_page_ids[]" value="${ id }" />
-	`;
-
-	const filenameNode = item.querySelector( '.magazine73-pages-panel__filename' );
-
-	if ( filenameNode ) {
-		filenameNode.textContent = filename;
+	if ( thumbUrl ) {
+		const thumb = document.createElement( 'img' );
+		thumb.className = 'magazine73-pages-panel__thumb';
+		thumb.src = thumbUrl;
+		thumb.alt = '';
+		item.appendChild( thumb );
 	}
+
+	const filenameNode = document.createElement( 'span' );
+	filenameNode.className = 'magazine73-pages-panel__filename';
+	filenameNode.textContent = filename;
+	item.appendChild( filenameNode );
+
+	if ( isLarge ) {
+		const warning = document.createElement( 'span' );
+		warning.className = 'magazine73-pages-panel__warning';
+		warning.textContent = __( 'Larger than 300 KB', 'magazine73' );
+		item.appendChild( warning );
+	}
+
+	const removeButton = document.createElement( 'button' );
+	removeButton.type = 'button';
+	removeButton.className = 'button-link-delete magazine73-pages-panel__remove';
+	removeButton.textContent = __( 'Remove', 'magazine73' );
+	item.appendChild( removeButton );
+
+	const hiddenInput = document.createElement( 'input' );
+	hiddenInput.type = 'hidden';
+	hiddenInput.name = 'magazine73_page_ids[]';
+	hiddenInput.value = id;
+	item.appendChild( hiddenInput );
 
 	return item;
 }
@@ -133,9 +153,12 @@ function updateSummary( panel, list ) {
 	}, 0 );
 	const count = items.length;
 
-	summaries[0].textContent = `Pages: ${ count }`;
-	summaries[1].textContent = `Total weight: ${ formatBytes( totalBytes ) }`;
-	summaries[2].textContent = `Average weight per page: ${ formatBytes( count > 0 ? Math.round( totalBytes / count ) : 0 ) }`;
+	summaries[0].textContent = sprintf( __( 'Pages: %d', 'magazine73' ), count );
+	summaries[1].textContent = sprintf( __( 'Total weight: %s', 'magazine73' ), formatBytes( totalBytes ) );
+	summaries[2].textContent = sprintf(
+		__( 'Average weight per page: %s', 'magazine73' ),
+		formatBytes( count > 0 ? Math.round( totalBytes / count ) : 0 )
+	);
 }
 
 /**

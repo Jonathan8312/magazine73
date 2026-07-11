@@ -300,9 +300,17 @@ final class Assets {
 		wp_enqueue_script_module(
 			$handle,
 			$src,
-			array(),
+			array(
+				array(
+					'id' => '@wordpress/i18n',
+				),
+			),
 			null
 		);
+
+		if ( function_exists( 'wp_set_script_translations' ) ) {
+			wp_set_script_translations( $handle, 'magazine73', MAGAZINE73_PATH . 'languages' );
+		}
 
 		self::$enqueued_modules[ $handle ] = true;
 	}

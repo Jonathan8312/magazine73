@@ -12,6 +12,7 @@ import fullscreenExitIcon from '../../icons/fullscreen-exit.svg?raw';
 import thumbnailsIcon from '../../icons/thumbnails.svg?raw';
 import downloadIcon from '../../icons/download.svg?raw';
 import { sanitizeImageUrl } from './page-loader.js';
+import { __ } from '@wordpress/i18n';
 
 const ICONS = {
 	prev: prevIcon,
@@ -179,8 +180,8 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 		fullscreenIcon.innerHTML = isFullscreen ? ICONS[ 'fullscreen-exit' ] : ICONS[ 'fullscreen-enter' ];
 
 		if ( fullscreenButton instanceof HTMLButtonElement ) {
-			const enterLabel = fullscreenButton.getAttribute( 'data-enter-label' ) || 'Enter fullscreen';
-			const exitLabel = fullscreenButton.getAttribute( 'data-exit-label' ) || 'Exit fullscreen';
+			const enterLabel = fullscreenButton.getAttribute( 'data-enter-label' ) || __( 'Enter fullscreen', 'magazine73' );
+			const exitLabel = fullscreenButton.getAttribute( 'data-exit-label' ) || __( 'Exit fullscreen', 'magazine73' );
 			fullscreenButton.setAttribute( 'aria-label', isFullscreen ? exitLabel : enterLabel );
 		}
 	} );

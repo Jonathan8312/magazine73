@@ -6,6 +6,7 @@ import { markReady } from '../shared/helpers.js';
 import { bindViewerControls } from './controls.js';
 import { createPageFlipViewer, createPageLoader } from './stpageflip-viewer.js';
 import { resolveStartPage, savePage } from './reading-progress.js';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Parse viewer configuration from a data attribute.
@@ -43,10 +44,8 @@ function updateLoadingProgress( viewerElement, progress ) {
 	}
 
 	if ( labelElement instanceof HTMLElement ) {
-		const template = labelElement.getAttribute( 'data-template' ) || 'Loading pages %1$d of %2$d';
-		labelElement.textContent = template
-			.replace( '%1$d', String( progress.loaded ) )
-			.replace( '%2$d', String( progress.total ) );
+		const template = labelElement.getAttribute( 'data-template' ) || __( 'Loading pages %1$d of %2$d', 'magazine73' );
+		labelElement.textContent = sprintf( template, progress.loaded, progress.total );
 	}
 }
 

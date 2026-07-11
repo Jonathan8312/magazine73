@@ -2,6 +2,8 @@
  * Local reading progress storage without personal data.
  */
 
+import { __, sprintf } from '@wordpress/i18n';
+
 const STORAGE_KEY = 'magazine73_reading_progress';
 
 /**
@@ -96,8 +98,8 @@ export function promptResumeChoice( viewerElement, savedPage ) {
 	const message = dialog.querySelector( '[data-magazine73-resume-message]' );
 
 	if ( message instanceof HTMLElement ) {
-		const template = message.getAttribute( 'data-template' ) || 'Continue from page %d or start from the cover?';
-		message.textContent = template.replace( '%d', String( savedPage + 1 ) );
+		const template = message.getAttribute( 'data-template' ) || __( 'Continue from page %d or start from the cover?', 'magazine73' );
+		message.textContent = sprintf( template, savedPage + 1 );
 	}
 
 	dialog.removeAttribute( 'hidden' );
