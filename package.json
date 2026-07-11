@@ -8,11 +8,15 @@
     "dev": "vite",
     "build": "vite build",
     "validate": "npm run build",
+    "test:e2e": "playwright test",
+    "package": "bash bin/package-release.sh",
     "i18n:pot": "php wp-cli.phar i18n make-pot plugin/magazine73 plugin/magazine73/languages/magazine73.pot --domain=magazine73 --exclude=third-party,assets/dist,vendor,languages && php wp-cli.phar i18n make-pot assets/src plugin/magazine73/languages/magazine73-js.pot --domain=magazine73 --include='*.js' && php wp-cli.phar i18n make-pot plugin/magazine73 plugin/magazine73/languages/magazine73.pot --domain=magazine73 --exclude=third-party,assets/dist,vendor,languages --merge=plugin/magazine73/languages/magazine73-js.pot",
     "i18n:json": "php wp-cli.phar i18n make-json plugin/magazine73/languages/magazine73-es_ES.po plugin/magazine73/languages --no-purge --use-map=plugin/magazine73/languages/i18n-map.json && msgfmt -o plugin/magazine73/languages/magazine73-es_ES.mo plugin/magazine73/languages/magazine73-es_ES.po"
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.0",
     "@wordpress/i18n": "^5.16.0",
+    "serve": "^14.2.4",
     "vite": "^6.3.5"
   }
 }

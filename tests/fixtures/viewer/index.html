@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Magazine73 Viewer Fixture</title>
+	<script type="importmap">
+		{
+			"imports": {
+				"@wordpress/i18n": "/tests/fixtures/mocks/i18n.js"
+			}
+		}
+	</script>
+</head>
+<body>
+	<div
+		class="magazine73-viewer"
+		data-magazine73-viewer
+		data-magazine73-config='{"magazineId":1,"contentHash":"fixture","pages":[{"url":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==","width":800,"height":1200},{"url":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==","width":800,"height":1200},{"url":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==","width":800,"height":1200},{"url":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==","width":800,"height":1200}],"settings":{"colors":{"background":"#f5f5f5","controls":"#ffffff","text":""},"controls":{"previous":true,"next":true,"counter":true,"fullscreen":true,"download":false,"zoom":true,"thumbnails":true}},"dimensions":{"width":"","height":""}}'
+		data-magazine-id="1"
+		tabindex="0"
+		role="region"
+		aria-label="Magazine viewer"
+	>
+		<div class="magazine73-viewer__layout">
+			<aside class="magazine73-thumbnails" data-magazine73-thumbnails hidden aria-label="Page thumbnails">
+				<div class="magazine73-thumbnails__list" data-magazine73-thumbnails-list></div>
+			</aside>
+			<div class="magazine73-viewer__main">
+				<div class="magazine73-viewer__canvas">
+					<div class="magazine73-viewer__loading" data-magazine73-loading aria-live="polite" hidden>
+						<p class="magazine73-viewer__loading-label" data-magazine73-loading-label data-template="Loading pages %1$d of %2$d">Loading magazine pages…</p>
+						<progress class="magazine73-viewer__loading-progress" data-magazine73-loading-progress max="100" value="0"></progress>
+					</div>
+					<div class="magazine73-viewer__viewport">
+						<div class="magazine73-viewer__zoom" data-magazine73-zoom>
+							<div class="magazine73-viewer__book"></div>
+						</div>
+					</div>
+				</div>
+				<div class="magazine73-viewer__controls magazine73-controls">
+					<button type="button" class="magazine73-controls__button" data-magazine73-action="thumbnails" aria-expanded="false" aria-label="Toggle page thumbnails">
+						<span class="magazine73-controls__icon" data-magazine73-icon="thumbnails" aria-hidden="true"></span>
+					</button>
+					<button type="button" class="magazine73-controls__button" data-magazine73-action="prev" aria-label="Previous page">
+						<span class="magazine73-controls__icon" data-magazine73-icon="prev" aria-hidden="true"></span>
+					</button>
+					<span class="magazine73-controls__status" data-magazine73-page-status aria-live="polite"></span>
+					<button type="button" class="magazine73-controls__button" data-magazine73-action="next" aria-label="Next page">
+						<span class="magazine73-controls__icon" data-magazine73-icon="next" aria-hidden="true"></span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="module" src="/plugin/magazine73/assets/dist/js/magazine73-viewer.js"></script>
+</body>
+</html>
