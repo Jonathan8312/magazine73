@@ -1,0 +1,450 @@
+# Copyright (C) 2026 Jonathan Torres
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Magazine73 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/magazine73\n"
+"Last-Translator: Magazine73 <dev@73software.com>\n"
+"Language-Team: Spanish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es_ES\n"
+"POT-Creation-Date: 2026-07-11T02:25:23+00:00\n"
+"PO-Revision-Date: 2026-07-11 02:30+0000\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: magazine73\n"
+
+#: js/admin/pages-panel.js:27
+msgid "Select WebP Pages"
+msgstr "Seleccionar páginas WebP"
+
+#: js/admin/pages-panel.js:29
+msgid "Use selected pages"
+msgstr "Usar páginas seleccionadas"
+
+#: js/admin/pages-panel.js:117
+#: includes/class-admin-pages-panel.php:76
+msgid "Larger than 300 KB"
+msgstr "Mayor de 300 KB"
+
+#: js/admin/pages-panel.js:124
+#: includes/class-admin-pages-panel.php:78
+msgid "Remove"
+msgstr "Eliminar"
+
+#. translators: %d: page count
+#: js/admin/pages-panel.js:156
+#: includes/class-admin-pages-panel.php:88
+#, js-format,php-format
+msgid "Pages: %d"
+msgstr "Páginas: %d"
+
+#. translators: %s: total file size
+#: js/admin/pages-panel.js:157
+#: includes/class-admin-pages-panel.php:97
+#, js-format,php-format
+msgid "Total weight: %s"
+msgstr "Peso total: %s"
+
+#. translators: %s: average file size
+#: js/admin/pages-panel.js:159
+#: includes/class-admin-pages-panel.php:106
+#, js-format,php-format
+msgid "Average weight per page: %s"
+msgstr "Peso medio por página: %s"
+
+#: js/admin/pdf-field.js:27
+#: includes/class-admin-metabox.php:107
+msgid "Select PDF"
+msgstr "Seleccionar PDF"
+
+#: js/admin/pdf-field.js:29
+msgid "Use this PDF"
+msgstr "Usar este PDF"
+
+#. translators: %1$d: loaded page count, %2$d: total page count.
+#: js/viewer/bootstrap.js:47
+#: templates/viewer.php:75
+#, js-format,php-format
+msgid "Loading pages %1$d of %2$d"
+msgstr "Cargando páginas %1$d de %2$d"
+
+#: js/viewer/controls.js:183
+#: templates/viewer.php:154
+#: templates/viewer.php:156
+msgid "Enter fullscreen"
+msgstr "Pantalla completa"
+
+#: js/viewer/controls.js:184
+#: templates/viewer.php:155
+msgid "Exit fullscreen"
+msgstr "Salir de pantalla completa"
+
+#. translators: %d: saved page number.
+#: js/viewer/reading-progress.js:101
+#: templates/viewer.php:191
+#, js-format,php-format
+msgid "Continue from page %d or start from the cover?"
+msgstr "¿Continuar desde la página %d o empezar desde la portada?"
+
+#. Plugin Name of the plugin
+#: magazine73.php
+msgid "Magazine73"
+msgstr "Magazine73"
+
+#. Plugin URI of the plugin
+#: magazine73.php
+msgid "https://73software.com/magazine73"
+msgstr "https://73software.com/magazine73"
+
+#. Description of the plugin
+#: magazine73.php
+msgid "Create, manage, and publish digital magazines with a page-flip viewer."
+msgstr "Crea, administra y publica revistas digitales con un visor de paso de página."
+
+#. Author of the plugin
+#: magazine73.php
+msgid "Jonathan Torres"
+msgstr "Jonathan Torres"
+
+#. Author URI of the plugin
+#: magazine73.php
+msgid "https://73software.com"
+msgstr "https://73software.com"
+
+#: includes/class-admin-list-table.php:53
+msgid "Cover"
+msgstr "Portada"
+
+#: includes/class-admin-list-table.php:59
+#: includes/class-admin-metabox.php:64
+msgid "Edition"
+msgstr "Edición"
+
+#: includes/class-admin-list-table.php:60
+#: includes/class-admin-metabox.php:74
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: includes/class-admin-list-table.php:83
+msgid "No cover yet"
+msgstr "Sin portada aún"
+
+#: includes/class-admin-metabox.php:36
+msgid "Magazine Details"
+msgstr "Detalles de la revista"
+
+#: includes/class-admin-metabox.php:85
+msgid "Public URL"
+msgstr "URL pública"
+
+#: includes/class-admin-metabox.php:95
+msgid "The public URL is available after the magazine is published."
+msgstr "La URL pública estará disponible después de publicar la revista."
+
+#: includes/class-admin-metabox.php:99
+msgid "PDF Download"
+msgstr "Descarga de PDF"
+
+#: includes/class-admin-metabox.php:101
+msgid "Optional PDF file for the download control in the viewer."
+msgstr "Archivo PDF opcional para el control de descarga en el visor."
+
+#: includes/class-admin-metabox.php:115
+msgid "Remove PDF"
+msgstr "Eliminar PDF"
+
+#: includes/class-admin-pages-panel.php:36
+msgid "Magazine Pages"
+msgstr "Páginas de la revista"
+
+#: includes/class-admin-pages-panel.php:61
+msgid "Add WebP images from the Media Library or upload new files. Pages are sorted automatically by filename."
+msgstr "Añade imágenes WebP desde la biblioteca de medios o sube archivos nuevos. Las páginas se ordenan automáticamente por nombre de archivo."
+
+#: includes/class-admin-pages-panel.php:65
+msgid "Add or Upload Pages"
+msgstr "Añadir o subir páginas"
+
+#: includes/class-admin-settings-page.php:36
+#: includes/class-admin-settings-page.php:109
+msgid "Magazine Settings"
+msgstr "Ajustes de revistas"
+
+#: includes/class-admin-settings-page.php:37
+msgid "Settings"
+msgstr "Ajustes"
+
+#: includes/class-admin-settings-page.php:60
+#: includes/class-admin-viewer-settings-metabox.php:77
+msgid "Viewer Colors"
+msgstr "Colores del visor"
+
+#: includes/class-admin-settings-page.php:80
+#: includes/class-admin-viewer-settings-metabox.php:103
+msgid "Visible Controls"
+msgstr "Controles visibles"
+
+#: includes/class-admin-settings-page.php:104
+msgid "You do not have permission to access these settings."
+msgstr "No tienes permiso para acceder a estos ajustes."
+
+#: includes/class-admin-settings-page.php:111
+msgid "Configure neutral global defaults for the magazine viewer. Magazines can inherit these settings or override them individually."
+msgstr "Configura valores globales neutros para el visor de revistas. Las revistas pueden heredar estos ajustes o sobrescribirlos individualmente."
+
+#: includes/class-admin-settings-page.php:128
+msgid "Choose neutral colors for the viewer shell and controls. Leave text color empty to inherit typography from the active theme."
+msgstr "Elige colores neutros para el contenedor y los controles del visor. Deja el color del texto vacío para heredar la tipografía del tema activo."
+
+#: includes/class-admin-settings-page.php:135
+msgid "Choose which viewer controls are visible by default."
+msgstr "Elige qué controles del visor son visibles por defecto."
+
+#: includes/class-admin-settings-page.php:160
+#: includes/class-admin-viewer-settings-metabox.php:97
+msgid "Inherit from theme"
+msgstr "Heredar del tema"
+
+#: includes/class-admin-settings-page.php:201
+#: includes/class-admin-viewer-settings-metabox.php:207
+msgid "Viewer background"
+msgstr "Fondo del visor"
+
+#: includes/class-admin-settings-page.php:202
+#: includes/class-admin-viewer-settings-metabox.php:208
+msgid "Control buttons"
+msgstr "Botones de control"
+
+#: includes/class-admin-settings-page.php:203
+#: includes/class-admin-viewer-settings-metabox.php:209
+msgid "Viewer text"
+msgstr "Texto del visor"
+
+#: includes/class-admin-settings-page.php:216
+#: includes/class-admin-viewer-settings-metabox.php:222
+#: templates/viewer.php:105
+msgid "Previous page"
+msgstr "Página anterior"
+
+#: includes/class-admin-settings-page.php:217
+#: includes/class-admin-viewer-settings-metabox.php:223
+#: templates/viewer.php:118
+msgid "Next page"
+msgstr "Página siguiente"
+
+#: includes/class-admin-settings-page.php:218
+#: includes/class-admin-viewer-settings-metabox.php:224
+msgid "Page counter"
+msgstr "Contador de páginas"
+
+#: includes/class-admin-settings-page.php:219
+#: includes/class-admin-viewer-settings-metabox.php:225
+msgid "Fullscreen"
+msgstr "Pantalla completa"
+
+#: includes/class-admin-settings-page.php:220
+#: includes/class-admin-viewer-settings-metabox.php:226
+msgid "PDF download"
+msgstr "Descarga de PDF"
+
+#: includes/class-admin-settings-page.php:221
+#: includes/class-admin-viewer-settings-metabox.php:227
+msgid "Zoom"
+msgstr "Zoom"
+
+#: includes/class-admin-settings-page.php:222
+#: includes/class-admin-viewer-settings-metabox.php:228
+msgid "Thumbnails"
+msgstr "Miniaturas"
+
+#: includes/class-admin-viewer-settings-metabox.php:36
+msgid "Viewer Settings"
+msgstr "Ajustes del visor"
+
+#: includes/class-admin-viewer-settings-metabox.php:69
+msgid "Use global settings"
+msgstr "Usar ajustes globales"
+
+#: includes/class-admin-viewer-settings-metabox.php:74
+msgid "Override global viewer colors and visible controls for this magazine."
+msgstr "Sobrescribir los colores del visor y los controles visibles para esta revista."
+
+#: includes/class-magazine-meta.php:38
+msgid "Optional magazine edition label."
+msgstr "Etiqueta opcional de edición de la revista."
+
+#: includes/class-magazine-pages.php:43
+msgid "Ordered WebP page attachment IDs for a magazine."
+msgstr "IDs de adjuntos WebP ordenados para una revista."
+
+#: includes/class-magazine-pdf.php:38
+msgid "Optional PDF attachment ID for magazine download."
+msgstr "ID de adjunto PDF opcional para la descarga de la revista."
+
+#: includes/class-magazine-renderer.php:37
+msgid "Magazine not found."
+msgstr "No se encontró la revista."
+
+#: includes/class-magazine-renderer.php:41
+msgid "This magazine is not available."
+msgstr "Esta revista no está disponible."
+
+#: includes/class-magazine-renderer.php:47
+msgid "This magazine has no pages yet."
+msgstr "Esta revista aún no tiene páginas."
+
+#: includes/class-post-type.php:34
+#: includes/class-post-type.php:36
+msgid "Magazines"
+msgstr "Revistas"
+
+#: includes/class-post-type.php:35
+#: includes/class-post-type.php:37
+msgid "Magazine"
+msgstr "Revista"
+
+#: includes/class-post-type.php:38
+msgid "Add New"
+msgstr "Añadir nueva"
+
+#: includes/class-post-type.php:39
+msgid "Add New Magazine"
+msgstr "Añadir nueva revista"
+
+#: includes/class-post-type.php:40
+msgid "New Magazine"
+msgstr "Nueva revista"
+
+#: includes/class-post-type.php:41
+msgid "Edit Magazine"
+msgstr "Editar revista"
+
+#: includes/class-post-type.php:42
+msgid "View Magazine"
+msgstr "Ver revista"
+
+#: includes/class-post-type.php:43
+msgid "All Magazines"
+msgstr "Todas las revistas"
+
+#: includes/class-post-type.php:44
+msgid "Search Magazines"
+msgstr "Buscar revistas"
+
+#: includes/class-post-type.php:45
+msgid "Parent Magazines:"
+msgstr "Revistas superiores:"
+
+#: includes/class-post-type.php:46
+msgid "No magazines found."
+msgstr "No se encontraron revistas."
+
+#: includes/class-post-type.php:47
+msgid "No magazines found in Trash."
+msgstr "No se encontraron revistas en la papelera."
+
+#: includes/class-post-type.php:48
+msgid "Magazine Archives"
+msgstr "Archivo de revistas"
+
+#: includes/class-post-type.php:49
+msgid "Magazine Attributes"
+msgstr "Atributos de la revista"
+
+#: includes/class-post-type.php:50
+msgid "Insert into magazine"
+msgstr "Insertar en la revista"
+
+#: includes/class-post-type.php:51
+msgid "Uploaded to this magazine"
+msgstr "Subido a esta revista"
+
+#: includes/class-post-type.php:52
+msgid "Filter magazines list"
+msgstr "Filtrar lista de revistas"
+
+#: includes/class-post-type.php:53
+msgid "Magazines list navigation"
+msgstr "Navegación de la lista de revistas"
+
+#: includes/class-post-type.php:54
+msgid "Magazines list"
+msgstr "Lista de revistas"
+
+#: includes/class-post-type.php:55
+msgid "Magazine published."
+msgstr "Revista publicada."
+
+#: includes/class-post-type.php:56
+msgid "Magazine published privately."
+msgstr "Revista publicada de forma privada."
+
+#: includes/class-post-type.php:57
+msgid "Magazine reverted to draft."
+msgstr "Revista devuelta a borrador."
+
+#: includes/class-post-type.php:58
+msgid "Magazine scheduled."
+msgstr "Revista programada."
+
+#: includes/class-post-type.php:59
+msgid "Magazine updated."
+msgstr "Revista actualizada."
+
+#: includes/class-shortcode.php:53
+msgid "A valid magazine ID is required."
+msgstr "Se requiere un ID de revista válido."
+
+#: includes/class-viewer-settings.php:79
+msgid "Whether the magazine inherits global viewer settings."
+msgstr "Si la revista hereda los ajustes globales del visor."
+
+#: includes/class-viewer-settings.php:93
+msgid "Per-magazine viewer setting overrides."
+msgstr "Sobrescrituras de ajustes del visor por revista."
+
+#: templates/viewer.php:60
+msgid "Magazine viewer"
+msgstr "Visor de revista"
+
+#: templates/viewer.php:64
+msgid "Page thumbnails"
+msgstr "Miniaturas de páginas"
+
+#: templates/viewer.php:77
+msgid "Loading magazine pages…"
+msgstr "Cargando páginas de la revista…"
+
+#: templates/viewer.php:95
+msgid "Toggle page thumbnails"
+msgstr "Mostrar u ocultar miniaturas"
+
+#: templates/viewer.php:128
+msgid "Zoom out"
+msgstr "Reducir zoom"
+
+#: templates/viewer.php:136
+msgid "Reset zoom"
+msgstr "Restablecer zoom"
+
+#: templates/viewer.php:144
+msgid "Zoom in"
+msgstr "Aumentar zoom"
+
+#: templates/viewer.php:166
+msgid "Download PDF"
+msgstr "Descargar PDF"
+
+#: templates/viewer.php:185
+msgid "Resume reading?"
+msgstr "¿Reanudar la lectura?"
+
+#: templates/viewer.php:195
+msgid "Continue reading"
+msgstr "Continuar leyendo"
+
+#: templates/viewer.php:198
+msgid "Start from cover"
+msgstr "Empezar desde la portada"

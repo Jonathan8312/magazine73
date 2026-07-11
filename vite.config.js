@@ -10,12 +10,13 @@ export default defineConfig( {
 		outDir,
 		emptyOutDir: true,
 		rollupOptions: {
+			external: [ '@wordpress/i18n' ],
 			input: {
 				'magazine73-viewer': resolve( rootDir, 'assets/src/entries/viewer.js' ),
-				'magazine73-admin': resolve( rootDir, 'assets/src/entries/admin.js' ),
+				'magazine73-editor': resolve( rootDir, 'assets/src/entries/admin.js' ),
 			},
 			output: {
-				entryFileNames: 'js/[name]-[hash].js',
+				entryFileNames: 'js/[name].js',
 				chunkFileNames: 'js/[name]-[hash].js',
 				assetFileNames: 'css/[name]-[hash][extname]',
 			},

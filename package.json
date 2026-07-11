@@ -7,9 +7,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "validate": "npm run build"
+    "validate": "npm run build",
+    "i18n:pot": "php wp-cli.phar i18n make-pot plugin/magazine73 plugin/magazine73/languages/magazine73.pot --domain=magazine73 --exclude=third-party,assets/dist,vendor,languages && php wp-cli.phar i18n make-pot assets/src plugin/magazine73/languages/magazine73-js.pot --domain=magazine73 --include='*.js' && php wp-cli.phar i18n make-pot plugin/magazine73 plugin/magazine73/languages/magazine73.pot --domain=magazine73 --exclude=third-party,assets/dist,vendor,languages --merge=plugin/magazine73/languages/magazine73-js.pot",
+    "i18n:json": "php wp-cli.phar i18n make-json plugin/magazine73/languages/magazine73-es_ES.po plugin/magazine73/languages --no-purge --use-map=plugin/magazine73/languages/i18n-map.json && msgfmt -o plugin/magazine73/languages/magazine73-es_ES.mo plugin/magazine73/languages/magazine73-es_ES.po"
   },
   "devDependencies": {
+    "@wordpress/i18n": "^5.16.0",
     "vite": "^6.3.5"
   }
 }

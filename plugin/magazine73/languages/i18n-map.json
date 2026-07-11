@@ -1,0 +1,9 @@
+{
+	"js/admin/bootstrap.js": "assets/dist/js/magazine73-editor.js",
+	"js/admin/pages-panel.js": "assets/dist/js/magazine73-editor.js",
+	"js/admin/pdf-field.js": "assets/dist/js/magazine73-editor.js",
+	"js/admin/viewer-settings-panel.js": "assets/dist/js/magazine73-editor.js",
+	"js/viewer/bootstrap.js": "assets/dist/js/magazine73-viewer.js",
+	"js/viewer/controls.js": "assets/dist/js/magazine73-viewer.js",
+	"js/viewer/reading-progress.js": "assets/dist/js/magazine73-viewer.js"
+}

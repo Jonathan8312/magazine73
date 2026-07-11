@@ -2,6 +2,8 @@
  * Optional PDF attachment field for magazine administration.
  */
 
+import { __ } from '@wordpress/i18n';
+
 /**
  * Initialize the PDF attachment field.
  */
@@ -22,9 +24,9 @@ export function initPdfField() {
 	}
 
 	const frame = window.wp.media( {
-		title: 'Select PDF',
+		title: __( 'Select PDF', 'magazine73' ),
 		button: {
-			text: 'Use this PDF',
+			text: __( 'Use this PDF', 'magazine73' ),
 		},
 		library: {
 			type: 'application/pdf',
