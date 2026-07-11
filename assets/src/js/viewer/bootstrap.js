@@ -3,7 +3,8 @@
  */
 
 import { markReady } from '../shared/helpers.js';
-import { bindViewerNavigation, createPageFlipViewer } from './stpageflip-viewer.js';
+import { bindViewerControls } from './controls.js';
+import { createPageFlipViewer } from './stpageflip-viewer.js';
 
 /**
  * Parse viewer configuration from a data attribute.
@@ -51,7 +52,7 @@ export function initViewer() {
 			return;
 		}
 
-		bindViewerNavigation( viewerElement, pageFlip );
+		bindViewerControls( viewerElement, pageFlip, config );
 		markReady( viewerElement, 'magazine73-viewer--ready' );
 	} );
 }
