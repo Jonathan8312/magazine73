@@ -19,14 +19,13 @@ permissions:
 
 jobs:
   analyze:
-    name: Analyze JavaScript and PHP
+    name: Analyze JavaScript and TypeScript
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         language:
           - javascript-typescript
-          - php
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

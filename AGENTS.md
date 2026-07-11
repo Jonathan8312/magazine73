@@ -71,6 +71,16 @@ Magazine73 is a WordPress plugin for creating and publishing digital magazines w
 - StPageFlip 2.0.7 is approved under the MIT license.
 - Do not add a dependency before checking its license.
 
+### Development-only dependency exception
+
+Composer development tooling may include packages under LGPL-2.1-or-later when they are used only for local and CI validation and are excluded from production ZIP artifacts via `.distignore`. The current approved exception covers:
+
+- `phpcompatibility/php-compatibility` (LGPL-2.1-or-later)
+- `phpcompatibility/phpcompatibility-paragonie` (LGPL-2.1-or-later)
+- `phpcompatibility/phpcompatibility-wp` (LGPL-2.1-or-later)
+
+These packages support PHPCS PHPCompatibility rules. They are not bundled with the distributable plugin and do not affect the GPL-2.0-or-later runtime license of Magazine73.
+
 ## Scope control
 
 - Work on only the phase explicitly requested.

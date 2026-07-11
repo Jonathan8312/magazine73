@@ -12,6 +12,7 @@
     "phpcompatibility/phpcompatibility-wp": "^2.1",
     "phpstan/phpstan": "^1.12",
     "squizlabs/php_codesniffer": "^3.10",
+    "szepeviktor/phpstan-wordpress": "^1.3",
     "wp-coding-standards/wpcs": "^3.1"
   },
   "config": {
@@ -22,6 +23,7 @@
   },
   "scripts": {
     "phpcs": "phpcs",
-    "phpstan": "phpstan analyse --configuration=phpstan.neon.dist --memory-limit=512M"
+    "phpstan": "phpstan analyse --configuration=phpstan.neon.dist --memory-limit=512M",
+    "audit": "composer audit --locked --no-interaction"
   }
 }
