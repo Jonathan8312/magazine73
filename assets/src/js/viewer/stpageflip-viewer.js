@@ -4,67 +4,19 @@
 
 import { PageFlip } from '../../../../plugin/magazine73/third-party/stpageflip/dist/js/page-flip.module.js';
 import '../../../../plugin/magazine73/third-party/stpageflip/src/Style/stPageFlip.css';
-
-/**
- * @typedef {object} ViewerPage
- * @property {string} url Page image URL.
- * @property {number} width Page width.
- * @property {number} height Page height.
- * @property {boolean} [blank] Whether the page is a generated blank page.
- */
+import { PageLoader } from './page-loader.js';
 
 /**
  * @typedef {object} ViewerConfig
  * @property {number} magazineId Magazine ID.
- * @property {ViewerPage[]} pages Viewer pages.
+ * @property {string} contentHash Content hash.
+ * @property {import('./page-loader.js').ViewerPage[]} pages Viewer pages.
  */
-
-/**
- * Create a blank page image for odd page counts.
- *
- * @param {number} width Page width.
- * @param {number} height Page height.
- */
-function createBlankPageDataUrl( width, height ) {
-	const canvas = document.createElement( 'canvas' );
-	const pageWidth = width > 0 ? width : 3;
-	const pageHeight = height > 0 ? height : 4;
-
-	canvas.width = pageWidth;
-	canvas.height = pageHeight;
-
-	const context = canvas.getContext( '2d' );
-
-	if ( context ) {
-		context.fillStyle = '#f5f5f5';
-		context.fillRect( 0, 0, pageWidth, pageHeight );
-		context.strokeStyle = '#d9d9d9';
-		context.lineWidth = 1;
-		context.strokeRect( 0.5, 0.5, pageWidth - 1, pageHeight - 1 );
-	}
-
-	return canvas.toDataURL( 'image/png' );
-}
-
-/**
- * Prepare page image URLs for StPageFlip.
- *
- * @param {ViewerPage[]} pages Viewer pages.
- */
-function preparePageUrls( pages ) {
-	return pages.map( ( page ) => {
-		if ( page.blank || '' === page.url ) {
-			return createBlankPageDataUrl( page.width, page.height );
-		}
-
-		return page.url;
-	} );
-}
 
 /**
  * Resolve base page dimensions from the cover page.
  *
- * @param {ViewerPage[]} pages Viewer pages.
+ * @param {import('./page-loader.js').ViewerPage[]} pages Viewer pages.
  */
 function getBaseDimensions( pages ) {
 	const cover = pages[0];
@@ -79,8 +31,10 @@ function getBaseDimensions( pages ) {
  *
  * @param {HTMLElement} viewerElement Viewer root element.
  * @param {ViewerConfig} config Viewer configuration.
+ * @param {PageLoader} pageLoader Progressive page loader.
+ * @param {number} startPage Initial page index.
  */
-export function createPageFlipViewer( viewerElement, config ) {
+export function createPageFlipViewer( viewerElement, config, pageLoader, startPage = 0 ) {
 	const bookElement = viewerElement.querySelector( '.magazine73-viewer__book' );
 
 	if ( ! ( bookElement instanceof HTMLElement ) || ! Array.isArray( config.pages ) || 0 === config.pages.length ) {
@@ -88,7 +42,19 @@ export function createPageFlipViewer( viewerElement, config ) {
 	}
 
 	const { width, height } = getBaseDimensions( config.pages );
-	const pageUrls = preparePageUrls( config.pages );
+	let updateTimeout = null;
+
+	const scheduleImageUpdate = ( pageFlip ) => {
+		if ( updateTimeout ) {
+			window.clearTimeout( updateTimeout );
+		}
+
+		updateTimeout = window.setTimeout( () => {
+			if ( 'function' === typeof pageFlip.updateFromImages ) {
+				pageFlip.updateFromImages( pageLoader.getResolvedUrls() );
+			}
+		}, 120 );
+	};
 
 	const pageFlip = new PageFlip( bookElement, {
 		width,
@@ -109,9 +75,26 @@ export function createPageFlipViewer( viewerElement, config ) {
 		useMouseEvents: true,
 	} );
 
+	pageLoader.onPageLoaded = () => {
+		scheduleImageUpdate( pageFlip );
+	};
+
 	pageFlip.on( 'init', () => {
-		pageFlip.loadFromImages( pageUrls );
+		pageFlip.loadFromImages( pageLoader.getResolvedUrls() );
+
+		if ( startPage > 0 && startPage < pageFlip.getPageCount() ) {
+			pageFlip.turnToPage( startPage );
+		}
 	} );
 
 	return pageFlip;
+}
+
+/**
+ * Create a page loader for a viewer configuration.
+ *
+ * @param {ViewerConfig} config Viewer configuration.
+ */
+export function createPageLoader( config ) {
+	return new PageLoader( config.pages );
 }

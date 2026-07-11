@@ -119,14 +119,15 @@ final class Magazine_Renderer {
 	 * @param int                                                                                                     $magazine_id Magazine post ID.
 	 * @param array{colors: array{background: string, controls: string, text: string}, controls: array<string, bool>} $settings    Resolved viewer settings.
 	 * @param array{width: string, height: string}                                                                    $dimensions  Optional viewer dimensions.
-	 * @return array{magazineId: int, pages: array<int, array{url: string, width: int, height: int, blank?: bool}>, settings: array{colors: array{background: string, controls: string, text: string}, controls: array<string, bool>}, dimensions: array{width: string, height: string}}
+	 * @return array{magazineId: int, contentHash: string, pages: array<int, array{url: string, width: int, height: int, blank?: bool}>, settings: array{colors: array{background: string, controls: string, text: string}, controls: array<string, bool>}, dimensions: array{width: string, height: string}}
 	 */
 	public static function build_viewer_config( int $magazine_id, array $settings, array $dimensions ): array {
 		return array(
-			'magazineId' => $magazine_id,
-			'pages'      => Magazine_Pages::get_viewer_pages( $magazine_id ),
-			'settings'   => $settings,
-			'dimensions' => $dimensions,
+			'magazineId'  => $magazine_id,
+			'contentHash' => Magazine_Pages::get_content_hash( $magazine_id ),
+			'pages'       => Magazine_Pages::get_viewer_pages( $magazine_id ),
+			'settings'    => $settings,
+			'dimensions'  => $dimensions,
 		);
 	}
 

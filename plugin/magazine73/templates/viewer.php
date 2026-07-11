@@ -66,6 +66,17 @@ $magazine73_show_controls_bar = $magazine73_show_previous || $magazine73_show_ne
 		<?php endif; ?>
 		<div class="magazine73-viewer__main">
 			<div class="magazine73-viewer__canvas">
+				<div class="magazine73-viewer__loading" data-magazine73-loading aria-live="polite">
+					<p
+						class="magazine73-viewer__loading-label"
+						data-magazine73-loading-label
+						<?php /* translators: %1$d: loaded page count, %2$d: total page count. */ ?>
+						data-template="<?php echo esc_attr__( 'Loading pages %1$d of %2$d', 'magazine73' ); ?>"
+					>
+						<?php esc_html_e( 'Loading magazine pages…', 'magazine73' ); ?>
+					</p>
+					<progress class="magazine73-viewer__loading-progress" data-magazine73-loading-progress max="100" value="0"></progress>
+				</div>
 				<div class="magazine73-viewer__viewport">
 					<div class="magazine73-viewer__zoom" data-magazine73-zoom>
 						<div class="magazine73-viewer__book"></div>
@@ -148,6 +159,34 @@ $magazine73_show_controls_bar = $magazine73_show_previous || $magazine73_show_ne
 					<?php endif; ?>
 				</div>
 			<?php endif; ?>
+		</div>
+	</div>
+	<div
+		class="magazine73-viewer__resume"
+		data-magazine73-resume
+		hidden
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby="magazine73-resume-title-<?php echo esc_attr( (string) $magazine->ID ); ?>"
+	>
+		<div class="magazine73-viewer__resume-panel">
+			<p id="magazine73-resume-title-<?php echo esc_attr( (string) $magazine->ID ); ?>" class="magazine73-viewer__resume-title">
+				<?php esc_html_e( 'Resume reading?', 'magazine73' ); ?>
+			</p>
+			<p
+				class="magazine73-viewer__resume-message"
+				data-magazine73-resume-message
+				<?php /* translators: %d: saved page number. */ ?>
+				data-template="<?php echo esc_attr__( 'Continue from page %d or start from the cover?', 'magazine73' ); ?>"
+			></p>
+			<div class="magazine73-viewer__resume-actions">
+				<button type="button" class="magazine73-controls__button" data-magazine73-resume-action="continue">
+					<?php esc_html_e( 'Continue reading', 'magazine73' ); ?>
+				</button>
+				<button type="button" class="magazine73-controls__button" data-magazine73-resume-action="restart">
+					<?php esc_html_e( 'Start from cover', 'magazine73' ); ?>
+				</button>
+			</div>
 		</div>
 	</div>
 </div>

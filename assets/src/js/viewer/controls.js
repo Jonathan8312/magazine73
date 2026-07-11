@@ -10,6 +10,7 @@ import zoomResetIcon from '../../icons/zoom-reset.svg?raw';
 import fullscreenEnterIcon from '../../icons/fullscreen-enter.svg?raw';
 import fullscreenExitIcon from '../../icons/fullscreen-exit.svg?raw';
 import thumbnailsIcon from '../../icons/thumbnails.svg?raw';
+import { sanitizeImageUrl } from './page-loader.js';
 
 const ICONS = {
 	prev: prevIcon,
@@ -53,8 +54,10 @@ function injectControlIcons( viewerElement ) {
  * @param {HTMLElement} viewerElement Viewer root element.
  * @param {import('../../../../plugin/magazine73/third-party/stpageflip/dist/js/page-flip.module.js').PageFlip} pageFlip Page flip instance.
  * @param {object} config Viewer configuration.
+ * @param {import('./page-loader.js').PageLoader|null} pageLoader Progressive page loader.
+ * @param {(pageIndex: number) => void|null} onPageChange Page change callback.
  */
-export function bindViewerControls( viewerElement, pageFlip, config ) {
+export function bindViewerControls( viewerElement, pageFlip, config, pageLoader = null, onPageChange = null ) {
 	injectControlIcons( viewerElement );
 
 	const previousButton = viewerElement.querySelector( '[data-magazine73-action="prev"]' );
@@ -86,6 +89,10 @@ export function bindViewerControls( viewerElement, pageFlip, config ) {
 			const currentPage = pageFlip.getCurrentPageIndex() + 1;
 			const totalPages = pageFlip.getPageCount();
 			statusElement.textContent = `${ currentPage } / ${ totalPages }`;
+		}
+
+		if ( 'function' === typeof onPageChange ) {
+			onPageChange( pageFlip.getCurrentPageIndex() );
 		}
 
 		if ( previousButton instanceof HTMLButtonElement ) {
@@ -199,7 +206,15 @@ export function bindViewerControls( viewerElement, pageFlip, config ) {
 				item.dataset.pageIndex = String( index );
 
 				const image = document.createElement( 'img' );
-				image.src = page.url;
+				const thumbnailUrl = pageLoader
+					? sanitizeImageUrl( pageLoader.getResolvedUrls()[ index ] )
+					: null;
+
+				if ( ! thumbnailUrl ) {
+					return;
+				}
+
+				image.setAttribute( 'src', thumbnailUrl );
 				image.alt = '';
 				image.loading = 'lazy';
 				item.appendChild( image );
