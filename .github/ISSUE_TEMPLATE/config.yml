@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Magazine73 MVP specification
+    url: https://github.com/Jonathan8312/magazine73/blob/develop/docs/ai/mvp-specification.md
+    about: Review the approved MVP scope before opening new work.

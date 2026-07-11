@@ -1,0 +1,87 @@
+name: CodeQL
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+  schedule:
+    - cron: '0 6 * * 1'
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze JavaScript and TypeScript
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Detect JavaScript or TypeScript sources
+        id: sources
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mapfile -t SOURCE_FILES < <(
+            find . -type f \( \
+              -name '*.cjs' -o \
+              -name '*.js' -o \
+              -name '*.jsx' -o \
+              -name '*.mjs' -o \
+              -name '*.ts' -o \
+              -name '*.tsx' \
+            \) \
+              ! -path './.git/*' \
+              ! -path './node_modules/*' \
+              ! -path './vendor/*' \
+              ! -path './dist/*' \
+              ! -path './build/*' \
+              ! -path './coverage/*' \
+              ! -path './third-party/*' \
+              ! -path './plugin/magazine73/third-party/*' \
+              | sort
+          )
+
+          if ((${#SOURCE_FILES[@]} > 0)); then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "### Supported source files detected"
+              printf '%s\n' "${SOURCE_FILES[@]}"
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Initialize CodeQL
+        if: steps.sources.outputs.enabled == 'true'
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+
+      - name: Autobuild
+        if: steps.sources.outputs.enabled == 'true'
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL analysis
+        if: steps.sources.outputs.enabled == 'true'
+        uses: github/codeql-action/analyze@v3
+
+      - name: Skip analysis when no supported sources exist
+        if: steps.sources.outputs.enabled == 'false'
+        shell: bash
+        run: |
+          {
+            echo "CodeQL status: skipped (informational)"
+            echo "No supported JavaScript or TypeScript source files were found."
+            echo "Excluded paths: .git/, node_modules/, vendor/, dist/, build/, coverage/, third-party/."
+            echo "CodeQL remains configured for javascript-typescript and will run automatically once frontend source files are added."
+          } | tee -a "$GITHUB_STEP_SUMMARY"
