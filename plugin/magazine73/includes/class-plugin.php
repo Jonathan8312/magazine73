@@ -21,6 +21,9 @@ final class Plugin {
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 
 		( new Post_Type() )->init();
+		( new Magazine_Meta() )->init();
+		( new Admin_Metabox() )->init();
+		( new Admin_List_Table() )->init();
 	}
 
 	/**
