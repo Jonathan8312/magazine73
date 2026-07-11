@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Magazine73 Admin Fixture</title>
+	<script type="importmap">
+		{
+			"imports": {
+				"@wordpress/i18n": "/tests/fixtures/mocks/i18n.js"
+			}
+		}
+	</script>
+</head>
+<body>
+	<div class="magazine73-admin-panel magazine73-pages-panel" data-magazine73-admin>
+		<p>
+			<button type="button" class="button button-secondary" id="magazine73-add-pages">Add or Upload Pages</button>
+		</p>
+		<ul class="magazine73-pages-panel__list" id="magazine73-pages-list"></ul>
+		<div class="magazine73-pages-panel__summary">
+			<p class="magazine73-admin-panel__summary">Pages: 0</p>
+			<p class="magazine73-admin-panel__summary">Total weight: 0 B</p>
+			<p class="magazine73-admin-panel__summary">Average weight per page: 0 B</p>
+		</div>
+	</div>
+	<div class="magazine73-pdf-field" data-magazine73-admin>
+		<button type="button" class="button button-secondary" data-magazine73-pdf-select>Select PDF</button>
+		<button type="button" class="button button-link-delete" data-magazine73-pdf-remove hidden>Remove PDF</button>
+		<input type="hidden" name="magazine73_pdf_attachment_id" value="0" data-magazine73-pdf-input />
+		<span class="magazine73-pdf-field__filename" data-magazine73-pdf-filename></span>
+	</div>
+	<script>
+		window.wp = {
+			media: function () {
+				const handlers = {};
+				return {
+					open() {},
+					on( event, callback ) {
+						handlers[ event ] = callback;
+					},
+					state() {
+						return {
+							get() {
+								return {
+									each( callback ) {
+										callback( {
+											get( key ) {
+												const values = {
+													id: 901,
+													mime: 'image/webp',
+													filename: '01-page.webp',
+													url: 'https://example.test/01-page.webp',
+												};
+												return values[ key ];
+											},
+										} );
+									},
+								};
+							},
+						};
+					},
+				};
+			},
+		};
+	</script>
+	<script type="module" src="/plugin/magazine73/assets/dist/js/magazine73-editor.js"></script>
+</body>
+</html>

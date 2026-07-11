@@ -80,12 +80,12 @@ export function createPageFlipViewer( viewerElement, config, pageLoader, startPa
 	};
 
 	pageFlip.on( 'init', () => {
-		pageFlip.loadFromImages( pageLoader.getResolvedUrls() );
-
 		if ( startPage > 0 && startPage < pageFlip.getPageCount() ) {
 			pageFlip.turnToPage( startPage );
 		}
 	} );
+
+	pageFlip.loadFromImages( pageLoader.getResolvedUrls() );
 
 	return pageFlip;
 }
