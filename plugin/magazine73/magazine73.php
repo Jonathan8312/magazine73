@@ -49,6 +49,7 @@ require_once MAGAZINE73_PATH . 'includes/class-public-magazine.php';
 require_once MAGAZINE73_PATH . 'includes/class-publish-guard.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-metabox.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-pages-panel.php';
+require_once MAGAZINE73_PATH . 'includes/class-admin-color-field.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-viewer-settings-metabox.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-settings-page.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-assets.php';

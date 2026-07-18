@@ -3,6 +3,7 @@
  */
 
 import { markReady, retryUntilReady, whenDomReady, whenWpMediaReady } from '../shared/helpers.js';
+import { initColorFields } from './color-fields.js';
 import { initPagesPanel, openPagesMediaLibrary } from './pages-panel.js';
 import { initPdfField, openPdfMediaLibrary } from './pdf-field.js';
 import { initViewerSettingsPanel } from './viewer-settings-panel.js';
@@ -61,6 +62,7 @@ export function initAdmin() {
 	whenDomReady( () => {
 		markAdminPanelsReady();
 		initViewerSettingsPanel();
+		initColorFields();
 
 		whenWpMediaReady( () => {
 			retryUntilReady( initMediaControls );
