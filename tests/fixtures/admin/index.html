@@ -4,13 +4,6 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Magazine73 Admin Fixture</title>
-	<script type="importmap">
-		{
-			"imports": {
-				"@wordpress/i18n": "/tests/fixtures/mocks/i18n.js"
-			}
-		}
-	</script>
 </head>
 <body>
 	<div class="magazine73-admin-panel magazine73-pages-panel" data-magazine73-admin>
@@ -31,11 +24,14 @@
 		<span class="magazine73-pdf-field__filename" data-magazine73-pdf-filename></span>
 	</div>
 	<script>
+		window.__magazine73MediaOpened = false;
 		window.wp = {
 			media: function () {
 				const handlers = {};
 				return {
-					open() {},
+					open() {
+						window.__magazine73MediaOpened = true;
+					},
 					on( event, callback ) {
 						handlers[ event ] = callback;
 					},
