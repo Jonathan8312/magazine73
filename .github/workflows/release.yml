@@ -9,8 +9,95 @@ permissions:
   contents: write
 
 jobs:
+  validate:
+    name: Pre-release validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate Composer manifest
+        run: composer validate --strict --no-check-publish
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Run Composer audit
+        run: composer audit --locked --no-interaction
+
+      - name: Lint plugin PHP files
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            php -l "$file"
+          done < <(find plugin/magazine73 -name '*.php' -print0)
+
+      - name: Run PHPCS
+        run: vendor/bin/phpcs
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --memory-limit=1G
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --configuration phpunit.xml.dist
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build frontend assets
+        run: npm run build
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+  validate-php80:
+    name: PHP 8.0 compatibility
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist --ignore-platform-reqs
+
+      - name: Lint plugin PHP files
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            php -l "$file"
+          done < <(find plugin/magazine73 -name '*.php' -print0)
+
+      - name: Run PHPCS with PHPCompatibilityWP
+        run: vendor/bin/phpcs --standard=phpcs.xml.dist
+
   release:
     name: Build and publish release ZIP
+    needs:
+      - validate
+      - validate-php80
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -30,6 +117,9 @@ jobs:
 
       - name: Build release ZIP
         run: bash bin/package-release.sh "${{ steps.version.outputs.version }}"
+
+      - name: Verify ZIP contents
+        run: bash bin/verify-release-zip.sh "magazine73-${{ steps.version.outputs.version }}.zip"
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2

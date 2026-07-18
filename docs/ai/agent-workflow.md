@@ -35,6 +35,8 @@ Run the lightweight checks available in the current environment:
 
 Functional WordPress testing is performed manually by the project owner in the local Docker environment.
 
+Before tagging a release, follow `docs/release/pre-release-checklist.md`.
+
 ## Pull request requirements
 
 Every pull request must:
