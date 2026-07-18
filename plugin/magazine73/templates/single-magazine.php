@@ -2,12 +2,34 @@
 /**
  * Single magazine public template.
  *
+ * Compatible with classic themes (`get_header` / `get_footer`) and block themes
+ * (`block_header_area` / `block_footer_area`).
+ *
  * @package Magazine73
  */
 
 defined( 'ABSPATH' ) || exit;
 
-get_header();
+$magazine73_is_block_theme = function_exists( 'wp_is_block_theme' ) && wp_is_block_theme();
+
+if ( $magazine73_is_block_theme ) {
+	?><!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<?php wp_head(); ?>
+</head>
+<body <?php body_class(); ?>>
+	<?php wp_body_open(); ?>
+	<div class="wp-site-blocks">
+		<header class="wp-block-template-part">
+			<?php block_header_area(); ?>
+		</header>
+	<?php
+} else {
+	get_header();
+}
 ?>
 <main class="magazine73-public-magazine" id="magazine73-public-magazine">
 	<?php
@@ -41,4 +63,21 @@ get_header();
 	?>
 </main>
 <?php
-get_footer();
+if ( $magazine73_is_block_theme ) {
+	?>
+		<footer class="wp-block-template-part">
+			<?php block_footer_area(); ?>
+		</footer>
+	</div>
+	<?php
+	if ( function_exists( 'wp_enqueue_stored_styles' ) ) {
+		wp_enqueue_stored_styles();
+	}
+	wp_footer();
+	?>
+</body>
+</html>
+	<?php
+} else {
+	get_footer();
+}
