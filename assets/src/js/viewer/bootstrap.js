@@ -36,6 +36,7 @@ function parseViewerConfig( viewerElement ) {
 function updateLoadingProgress( viewerElement, progress ) {
 	const progressElement = viewerElement.querySelector( '[data-magazine73-loading-progress]' );
 	const labelElement = viewerElement.querySelector( '[data-magazine73-loading-label]' );
+	const statusElement = viewerElement.querySelector( '[data-magazine73-loading-status]' );
 
 	if ( progressElement instanceof HTMLProgressElement ) {
 		const percent = progress.total > 0 ? Math.round( ( progress.loaded / progress.total ) * 100 ) : 0;
@@ -47,10 +48,20 @@ function updateLoadingProgress( viewerElement, progress ) {
 		const template = labelElement.getAttribute( 'data-template' ) || __( 'Loading pages %1$d of %2$d', 'magazine73' );
 		labelElement.textContent = sprintf( template, progress.loaded, progress.total );
 	}
+
+	if ( statusElement instanceof HTMLElement ) {
+		const isComplete = progress.loaded + progress.failed >= progress.total;
+		statusElement.toggleAttribute( 'hidden', isComplete );
+
+		if ( ! isComplete ) {
+			const template = statusElement.getAttribute( 'data-template' ) || __( 'Loading pages %1$d of %2$d…', 'magazine73' );
+			statusElement.textContent = sprintf( template, progress.loaded, progress.total );
+		}
+	}
 }
 
 /**
- * Show or hide the loading overlay.
+ * Show or hide the blocking loading overlay.
  *
  * @param {HTMLElement} viewerElement Viewer root element.
  * @param {boolean} isVisible Whether the overlay is visible.
@@ -60,6 +71,7 @@ function setLoadingVisible( viewerElement, isVisible ) {
 
 	if ( loadingElement instanceof HTMLElement ) {
 		loadingElement.toggleAttribute( 'hidden', ! isVisible );
+		loadingElement.setAttribute( 'aria-busy', isVisible ? 'true' : 'false' );
 	}
 }
 
@@ -77,16 +89,18 @@ async function initSingleViewer( viewerElement ) {
 
 	const pageLoader = createPageLoader( config );
 
-	setLoadingVisible( viewerElement, true );
-	updateLoadingProgress( viewerElement, pageLoader.getProgress() );
-
 	pageLoader.onProgress = ( progress ) => {
 		updateLoadingProgress( viewerElement, progress );
 	};
 
-	await pageLoader.preloadIndices( pageLoader.getInitialIndices() );
-
+	// Ask resume before heavy work so the dialog stays responsive.
 	const startPage = await resolveStartPage( viewerElement, config );
+
+	setLoadingVisible( viewerElement, true );
+	updateLoadingProgress( viewerElement, pageLoader.getProgress() );
+
+	await pageLoader.preloadIndices( pageLoader.getPriorityIndices( startPage ) );
+
 	const pageFlip = createPageFlipViewer( viewerElement, config, pageLoader, startPage );
 
 	if ( ! pageFlip ) {
@@ -103,6 +117,7 @@ async function initSingleViewer( viewerElement ) {
 		pageLoader.startBackgroundPreload( pageFlip.getCurrentPageIndex() );
 		savePage( config.magazineId, config.contentHash, pageFlip.getCurrentPageIndex() );
 		markReady( viewerElement, 'magazine73-viewer--ready' );
+		updateLoadingProgress( viewerElement, pageLoader.getProgress() );
 	} );
 
 	pageFlip.on( 'flip', () => {

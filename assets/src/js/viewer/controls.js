@@ -209,9 +209,7 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 				item.dataset.pageIndex = String( index );
 
 				const image = document.createElement( 'img' );
-				const thumbnailUrl = pageLoader
-					? sanitizeImageUrl( pageLoader.getResolvedUrls()[ index ] )
-					: null;
+				const thumbnailUrl = sanitizeImageUrl( page.url );
 
 				if ( ! thumbnailUrl ) {
 					return;
@@ -220,6 +218,7 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 				image.setAttribute( 'src', thumbnailUrl );
 				image.alt = '';
 				image.loading = 'lazy';
+				image.decoding = 'async';
 				item.appendChild( image );
 
 				item.addEventListener( 'click', () => {

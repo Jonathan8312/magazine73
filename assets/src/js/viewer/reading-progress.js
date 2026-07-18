@@ -108,11 +108,17 @@ export function promptResumeChoice( viewerElement, savedPage ) {
 		const handleChoice = ( event ) => {
 			const target = event.target;
 
-			if ( ! ( target instanceof HTMLElement ) ) {
+			if ( ! ( target instanceof Element ) ) {
 				return;
 			}
 
-			const action = target.getAttribute( 'data-magazine73-resume-action' );
+			const actionElement = target.closest( '[data-magazine73-resume-action]' );
+
+			if ( ! ( actionElement instanceof HTMLElement ) ) {
+				return;
+			}
+
+			const action = actionElement.getAttribute( 'data-magazine73-resume-action' );
 
 			if ( ! action ) {
 				return;
@@ -124,6 +130,12 @@ export function promptResumeChoice( viewerElement, savedPage ) {
 		};
 
 		dialog.addEventListener( 'click', handleChoice );
+
+		const continueButton = dialog.querySelector( '[data-magazine73-resume-action="continue"]' );
+
+		if ( continueButton instanceof HTMLElement ) {
+			continueButton.focus();
+		}
 	} );
 }
 

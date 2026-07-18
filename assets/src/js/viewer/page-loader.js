@@ -4,6 +4,9 @@
 
 const INITIAL_PAGE_COUNT = 4;
 const NEARBY_PRIORITY_RADIUS = 4;
+const MAX_CONCURRENT_LOADS = 3;
+const PLACEHOLDER_WIDTH = 3;
+const PLACEHOLDER_HEIGHT = 4;
 
 /**
  * Validate an image source before DOM assignment.
@@ -49,8 +52,8 @@ export function sanitizeImageUrl( url ) {
  */
 export function createBlankPageDataUrl( width, height ) {
 	const canvas = document.createElement( 'canvas' );
-	const pageWidth = width > 0 ? width : 3;
-	const pageHeight = height > 0 ? height : 4;
+	const pageWidth = width > 0 ? width : PLACEHOLDER_WIDTH;
+	const pageHeight = height > 0 ? height : PLACEHOLDER_HEIGHT;
 
 	canvas.width = pageWidth;
 	canvas.height = pageHeight;
@@ -69,29 +72,30 @@ export function createBlankPageDataUrl( width, height ) {
 }
 
 /**
- * Create a neutral placeholder while a page image is loading.
+ * Shared tiny placeholder (avoid per-page full-resolution canvases).
  *
- * @param {number} width Page width.
- * @param {number} height Page height.
+ * @return {string} Data URL.
  */
-function createLoadingPlaceholderDataUrl( width, height ) {
-	const canvas = document.createElement( 'canvas' );
-	const pageWidth = width > 0 ? width : 3;
-	const pageHeight = height > 0 ? height : 4;
+function getSharedLoadingPlaceholder() {
+	if ( getSharedLoadingPlaceholder.cache ) {
+		return getSharedLoadingPlaceholder.cache;
+	}
 
-	canvas.width = pageWidth;
-	canvas.height = pageHeight;
+	const canvas = document.createElement( 'canvas' );
+	canvas.width = PLACEHOLDER_WIDTH;
+	canvas.height = PLACEHOLDER_HEIGHT;
 
 	const context = canvas.getContext( '2d' );
 
 	if ( context ) {
 		context.fillStyle = '#efefef';
-		context.fillRect( 0, 0, pageWidth, pageHeight );
+		context.fillRect( 0, 0, PLACEHOLDER_WIDTH, PLACEHOLDER_HEIGHT );
 		context.strokeStyle = '#d0d0d0';
-		context.strokeRect( 0.5, 0.5, pageWidth - 1, pageHeight - 1 );
+		context.strokeRect( 0.5, 0.5, PLACEHOLDER_WIDTH - 1, PLACEHOLDER_HEIGHT - 1 );
 	}
 
-	return canvas.toDataURL( 'image/png' );
+	getSharedLoadingPlaceholder.cache = canvas.toDataURL( 'image/png' );
+	return getSharedLoadingPlaceholder.cache;
 }
 
 /**
@@ -108,6 +112,8 @@ export class PageLoader {
 		this.inFlight = new Map();
 		this.currentIndex = 0;
 		this.backgroundActive = false;
+		this.queue = [];
+		this.activeLoads = 0;
 		this.onPageLoaded = null;
 		this.onProgress = null;
 
@@ -120,15 +126,50 @@ export class PageLoader {
 	}
 
 	/**
-	 * Get indices for the initial visible page group.
+	 * Get indices for the initial visible page group around a start page.
+	 *
+	 * @param {number} [startIndex=0] Page index to center on.
+	 * @return {number[]}
 	 */
-	getInitialIndices() {
-		const count = Math.min( INITIAL_PAGE_COUNT, this.pages.length );
-		return Array.from( { length: count }, ( _, index ) => index );
+	getPriorityIndices( startIndex = 0 ) {
+		const center = Math.max( 0, Math.min( startIndex, this.pages.length - 1 ) );
+		const indices = new Set();
+
+		for ( let offset = 0; offset <= NEARBY_PRIORITY_RADIUS; offset++ ) {
+			const before = center - offset;
+			const after = center + offset;
+
+			if ( before >= 0 ) {
+				indices.add( before );
+			}
+
+			if ( after < this.pages.length ) {
+				indices.add( after );
+			}
+
+			if ( indices.size >= INITIAL_PAGE_COUNT && offset >= 1 ) {
+				break;
+			}
+		}
+
+		// Always warm the cover for restart / first paint.
+		indices.add( 0 );
+		if ( this.pages.length > 1 ) {
+			indices.add( 1 );
+		}
+
+		return Array.from( indices ).sort( ( left, right ) => left - right );
 	}
 
 	/**
-	 * Preload a set of page indices.
+	 * Get indices for the initial visible page group.
+	 */
+	getInitialIndices() {
+		return this.getPriorityIndices( 0 );
+	}
+
+	/**
+	 * Preload a set of page indices (awaits completion).
 	 *
 	 * @param {number[]} indices Page indices.
 	 */
@@ -137,15 +178,17 @@ export class PageLoader {
 	}
 
 	/**
-	 * Resolve URLs for StPageFlip, using placeholders when needed.
+	 * Resolve URLs for StPageFlip, using a shared tiny placeholder when needed.
 	 */
 	getResolvedUrls() {
+		const placeholder = getSharedLoadingPlaceholder();
+
 		return this.pages.map( ( page, index ) => {
 			if ( this.resolvedUrls[ index ] ) {
 				return this.resolvedUrls[ index ];
 			}
 
-			return createLoadingPlaceholderDataUrl( page.width, page.height );
+			return placeholder;
 		} );
 	}
 
@@ -160,6 +203,7 @@ export class PageLoader {
 			loaded,
 			failed,
 			total: this.pages.length,
+			pending: this.states.filter( ( state ) => 'pending' === state || 'loading' === state ).length,
 		};
 	}
 
@@ -207,12 +251,15 @@ export class PageLoader {
 			return this.inFlight.get( index );
 		}
 
+		this.states[ index ] = 'loading';
+		this.activeLoads += 1;
+
 		const promise = new Promise( ( resolve ) => {
-			this.states[ index ] = 'loading';
 			const image = new Image();
 
 			const finish = ( success ) => {
 				this.inFlight.delete( index );
+				this.activeLoads = Math.max( 0, this.activeLoads - 1 );
 
 				if ( success ) {
 					this.states[ index ] = 'loaded';
@@ -230,11 +277,19 @@ export class PageLoader {
 				}
 
 				resolve();
+				this.pumpQueue();
 			};
 
 			image.decoding = 'async';
 
-			image.addEventListener( 'load', () => finish( true ) );
+			image.addEventListener( 'load', () => {
+				if ( 'function' === typeof image.decode ) {
+					image.decode().then( () => finish( true ) ).catch( () => finish( true ) );
+					return;
+				}
+
+				finish( true );
+			} );
 			image.addEventListener( 'error', () => finish( false ) );
 
 			const safeUrl = sanitizeImageUrl( page.url );
@@ -246,7 +301,7 @@ export class PageLoader {
 
 			image.setAttribute( 'src', safeUrl );
 
-			if ( image.complete ) {
+			if ( image.complete && image.naturalWidth > 0 ) {
 				finish( true );
 			}
 		} );
@@ -261,7 +316,10 @@ export class PageLoader {
 	queueBackgroundLoads() {
 		const pending = this.pages
 			.map( ( page, index ) => ( { index, page } ) )
-			.filter( ( entry ) => 'pending' === this.states[ entry.index ] && ! entry.page.blank && '' !== entry.page.url )
+			.filter( ( entry ) => {
+				const state = this.states[ entry.index ];
+				return ( 'pending' === state ) && ! entry.page.blank && '' !== entry.page.url && ! this.inFlight.has( entry.index );
+			} )
 			.sort( ( left, right ) => {
 				const leftDistance = Math.abs( left.index - this.currentIndex );
 				const rightDistance = Math.abs( right.index - this.currentIndex );
@@ -271,18 +329,29 @@ export class PageLoader {
 				}
 
 				return leftDistance - rightDistance;
-			} );
+			} )
+			.map( ( entry ) => entry.index );
 
-		pending.slice( 0, NEARBY_PRIORITY_RADIUS * 2 + 1 ).forEach( ( entry ) => {
-			this.preloadIndex( entry.index );
-		} );
+		this.queue = pending;
+		this.pumpQueue();
+	}
 
-		pending.slice( NEARBY_PRIORITY_RADIUS * 2 + 1 ).forEach( ( entry ) => {
-			window.setTimeout( () => {
-				if ( 'pending' === this.states[ entry.index ] ) {
-					this.preloadIndex( entry.index );
-				}
-			}, 0 );
-		} );
+	/**
+	 * Start queued loads up to the concurrency limit.
+	 */
+	pumpQueue() {
+		while ( this.activeLoads < MAX_CONCURRENT_LOADS && this.queue.length > 0 ) {
+			const index = this.queue.shift();
+
+			if ( 'undefined' === typeof index ) {
+				break;
+			}
+
+			if ( 'pending' !== this.states[ index ] || this.inFlight.has( index ) ) {
+				continue;
+			}
+
+			this.preloadIndex( index );
+		}
 	}
 }
