@@ -8,10 +8,24 @@ test.describe( 'Magazine73 admin fixture', () => {
 		await expect( page.locator( '.magazine73-pdf-field' ) ).toHaveClass( /magazine73-admin--ready/ );
 	} );
 
-	test( 'exposes page and PDF admin controls', async ( { page } ) => {
+	test( 'opens the media library when adding pages', async ( { page } ) => {
 		await page.goto( '/tests/fixtures/admin/index.html' );
 
-		await expect( page.locator( '#magazine73-add-pages' ) ).toBeVisible();
-		await expect( page.locator( '[data-magazine73-pdf-select]' ) ).toBeVisible();
+		await page.evaluate( () => {
+			window.__magazine73MediaOpened = false;
+			const originalMedia = window.wp.media;
+			window.wp.media = function () {
+				const frame = originalMedia();
+				const originalOpen = frame.open.bind( frame );
+				frame.open = () => {
+					window.__magazine73MediaOpened = true;
+					originalOpen();
+				};
+				return frame;
+			};
+		} );
+
+		await page.locator( '#magazine73-add-pages' ).click();
+		await expect.poll( () => page.evaluate( () => window.__magazine73MediaOpened ) ).toBe( true );
 	} );
 } );
