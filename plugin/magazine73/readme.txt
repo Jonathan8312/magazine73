@@ -4,7 +4,7 @@ Tags: magazine, flipbook, webp, digital publishing, page flip
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 0.1.3
+Stable tag: 0.1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,9 @@ No. Uninstall cleanup removes Magazine73 posts, metadata, and plugin settings on
 
 == Changelog ==
 
+= 0.1.4 =
+* Restore Magazines → Settings access for administrators on upgraded installs.
+
 = 0.1.3 =
 * Fix header.php deprecation notice on block themes for the public magazine page.
 
@@ -68,6 +71,9 @@ No. Uninstall cleanup removes Magazine73 posts, metadata, and plugin settings on
 * Initial public MVP release.
 
 == Upgrade Notice ==
+
+= 0.1.4 =
+Restores Magazines → Settings for administrators after plugin upgrades.
 
 = 0.1.3 =
 Removes the block-theme header.php deprecation on public magazine pages.
