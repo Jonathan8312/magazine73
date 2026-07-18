@@ -15,7 +15,7 @@ get_header();
 		the_post();
 
 		$magazine73_magazine_id = get_the_ID();
-		$magazine73_edition     = Magazine_Meta::get_edition( $magazine73_magazine_id );
+		$magazine73_edition     = \Magazine73\Magazine_Meta::get_edition( $magazine73_magazine_id );
 		?>
 		<article <?php post_class( 'magazine73-public-magazine__article' ); ?>>
 			<header class="magazine73-public-magazine__header">
@@ -32,7 +32,7 @@ get_header();
 			<div class="magazine73-public-magazine__viewer">
 				<?php
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in Magazine_Renderer and viewer template.
-				echo Magazine_Renderer::render_viewer( $magazine73_magazine_id );
+				echo \Magazine73\Magazine_Renderer::render_viewer( $magazine73_magazine_id );
 				?>
 			</div>
 		</article>
