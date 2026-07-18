@@ -31,7 +31,7 @@ if ( $magazine73_is_block_theme ) {
 	get_header();
 }
 ?>
-<main class="magazine73-public-magazine" id="magazine73-public-magazine">
+		<main class="magazine73-public-magazine alignwide" id="magazine73-public-magazine">
 	<?php
 	while ( have_posts() ) :
 		the_post();
