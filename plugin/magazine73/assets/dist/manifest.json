@@ -1,7 +1,7 @@
 {
-  "_helpers-fXvRE6kV.js": {
-    "file": "js/helpers-fXvRE6kV.js",
-    "name": "helpers"
+  "_wordpress-i18n-ohws4982.js": {
+    "file": "js/wordpress-i18n-ohws4982.js",
+    "name": "wordpress-i18n"
   },
   "assets/src/entries/admin.js": {
     "file": "js/magazine73-editor.js",
@@ -9,7 +9,7 @@
     "src": "assets/src/entries/admin.js",
     "isEntry": true,
     "imports": [
-      "_helpers-fXvRE6kV.js"
+      "_wordpress-i18n-ohws4982.js"
     ],
     "css": [
       "css/magazine73-editor-D_LsGtzz.css"
@@ -21,7 +21,7 @@
     "src": "assets/src/entries/viewer.js",
     "isEntry": true,
     "imports": [
-      "_helpers-fXvRE6kV.js"
+      "_wordpress-i18n-ohws4982.js"
     ],
     "css": [
       "css/magazine73-viewer-C7EEo6Gu.css"

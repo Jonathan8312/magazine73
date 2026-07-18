@@ -5,41 +5,47 @@
 import { __, sprintf } from '@wordpress/i18n';
 
 const LARGE_PAGE_BYTES = 307200;
+const INIT_FLAG = 'magazine73PagesInitialized';
+
+/** @type {object | null} */
+let mediaFrame = null;
 
 /**
  * Initialize the magazine pages panel.
+ *
+ * @return {boolean} Whether initialization succeeded.
  */
 export function initPagesPanel() {
 	const panel = document.querySelector( '.magazine73-pages-panel[data-magazine73-admin]' );
 
-	if ( ! panel || 'undefined' === typeof window.wp?.media ) {
-		return;
+	if ( ! panel || panel.dataset[ INIT_FLAG ] === '1' ) {
+		return Boolean( panel && panel.dataset[ INIT_FLAG ] === '1' );
+	}
+
+	if ( 'undefined' === typeof window.wp?.media ) {
+		return false;
 	}
 
 	const list = panel.querySelector( '#magazine73-pages-list' );
 	const addButton = panel.querySelector( '#magazine73-add-pages' );
 
 	if ( ! list || ! addButton ) {
-		return;
+		return false;
 	}
 
-	const frame = window.wp.media( {
+	mediaFrame = window.wp.media( {
 		title: __( 'Select WebP Pages', 'magazine73' ),
 		button: {
 			text: __( 'Use selected pages', 'magazine73' ),
 		},
 		library: {
-			type: 'image/webp',
+			type: 'image',
 		},
 		multiple: true,
 	} );
 
-	addButton.addEventListener( 'click', () => {
-		frame.open();
-	} );
-
-	frame.on( 'select', () => {
-		const selection = frame.state().get( 'selection' );
+	mediaFrame.on( 'select', () => {
+		const selection = mediaFrame.state().get( 'selection' );
 		const existingIds = new Set(
 			Array.from( list.querySelectorAll( '[data-attachment-id]' ) ).map( ( item ) =>
 				item.getAttribute( 'data-attachment-id' )
@@ -80,6 +86,20 @@ export function initPagesPanel() {
 			updateSummary( panel, list );
 		}
 	} );
+
+	panel.dataset[ INIT_FLAG ] = '1';
+	return true;
+}
+
+/**
+ * Open the media library for magazine pages.
+ */
+export function openPagesMediaLibrary() {
+	if ( ! initPagesPanel() || ! mediaFrame ) {
+		return;
+	}
+
+	mediaFrame.open();
 }
 
 /**
