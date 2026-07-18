@@ -1,7 +1,38 @@
 import { test, expect } from '@playwright/test';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const VIEWER_FIXTURE = '/tests/fixtures/viewer/index.html';
 const PRODUCTION_VIEWER_BUNDLE = '/plugin/magazine73/assets/dist/js/magazine73-viewer.js';
+const ROOT = process.cwd();
+
+/**
+ * Resolve the built viewer stylesheet from the Vite manifest.
+ *
+ * @return {string} Absolute URL path for the viewer CSS.
+ */
+function getViewerStylesheetPath() {
+	const manifest = JSON.parse(
+		fs.readFileSync( path.join( ROOT, 'plugin/magazine73/assets/dist/manifest.json' ), 'utf8' )
+	);
+	const cssFile = manifest[ 'assets/src/entries/viewer.js' ]?.css?.[0];
+
+	if ( ! cssFile ) {
+		throw new Error( 'Viewer CSS missing from Vite manifest. Run npm run build.' );
+	}
+
+	return `/plugin/magazine73/assets/dist/${ cssFile }`;
+}
+
+/**
+ * Open the viewer fixture with production JS + CSS.
+ *
+ * @param {import('@playwright/test').Page} page Playwright page.
+ */
+async function openViewerFixture( page ) {
+	await page.goto( VIEWER_FIXTURE );
+	await page.addStyleTag( { url: getViewerStylesheetPath() } );
+}
 
 async function waitForViewerReady( page ) {
 	await expect( page.locator( '[data-magazine73-viewer]' ) ).toHaveClass( /magazine73-viewer--ready/, { timeout: 15000 } );
@@ -16,14 +47,14 @@ test.describe( 'Magazine73 viewer fixture', () => {
 			}
 		} );
 
-		await page.goto( VIEWER_FIXTURE );
+		await openViewerFixture( page );
 		await waitForViewerReady( page );
 
 		expect( responses.some( ( url ) => url.endsWith( PRODUCTION_VIEWER_BUNDLE ) ) ).toBeTruthy();
 	} );
 
 	test( 'initializes the viewer shell and controls', async ( { page } ) => {
-		await page.goto( VIEWER_FIXTURE );
+		await openViewerFixture( page );
 
 		const viewer = page.locator( '[data-magazine73-viewer]' );
 		await expect( viewer ).toBeVisible();
@@ -36,7 +67,7 @@ test.describe( 'Magazine73 viewer fixture', () => {
 	} );
 
 	test( 'supports keyboard navigation between pages', async ( { page } ) => {
-		await page.goto( VIEWER_FIXTURE );
+		await openViewerFixture( page );
 		await waitForViewerReady( page );
 
 		await page.locator( '[data-magazine73-viewer]' ).focus();
@@ -46,7 +77,7 @@ test.describe( 'Magazine73 viewer fixture', () => {
 	} );
 
 	test( 'toggles thumbnails and applies zoom controls', async ( { page } ) => {
-		await page.goto( VIEWER_FIXTURE );
+		await openViewerFixture( page );
 		await waitForViewerReady( page );
 
 		const thumbnails = page.locator( '[data-magazine73-thumbnails]' );
@@ -63,7 +94,7 @@ test.describe( 'Magazine73 viewer fixture', () => {
 	} );
 
 	test( 'exposes fullscreen control after initialization', async ( { page } ) => {
-		await page.goto( VIEWER_FIXTURE );
+		await openViewerFixture( page );
 		await waitForViewerReady( page );
 
 		const fullscreenButton = page.locator( '[data-magazine73-action="fullscreen"]' );
@@ -84,7 +115,7 @@ test.describe( 'Magazine73 viewer fixture', () => {
 			);
 		} );
 
-		await page.goto( VIEWER_FIXTURE );
+		await openViewerFixture( page );
 
 		const resumeDialog = page.locator( '[data-magazine73-resume]' );
 		await expect( resumeDialog ).toBeVisible( { timeout: 15000 } );
@@ -93,5 +124,54 @@ test.describe( 'Magazine73 viewer fixture', () => {
 		await page.locator( '[data-magazine73-resume-action="continue"]' ).click();
 		await waitForViewerReady( page );
 		await expect( resumeDialog ).toBeHidden();
+	} );
+
+	test( 'uses a landscape two-page book box on desktop', async ( { page } ) => {
+		await page.setViewportSize( { width: 1280, height: 900 } );
+		await openViewerFixture( page );
+		await waitForViewerReady( page );
+
+		const metrics = await page.evaluate( () => {
+			const book = document.querySelector( '.magazine73-viewer__book' );
+			const shell = document.querySelector( '.magazine73-viewer__canvas' );
+			const main = document.querySelector( '.magazine73-viewer__main' );
+			const bookRect = book.getBoundingClientRect();
+			const shellRect = shell.getBoundingClientRect();
+			const mainRect = main.getBoundingClientRect();
+
+			return {
+				bookWidth: bookRect.width,
+				bookHeight: bookRect.height,
+				shellWidth: shellRect.width,
+				mainWidth: mainRect.width,
+			};
+		} );
+
+		expect( metrics.bookWidth ).toBeGreaterThan( metrics.bookHeight );
+		expect( Math.abs( metrics.shellWidth - metrics.bookWidth ) ).toBeLessThan( 4 );
+		expect( metrics.shellWidth ).toBeLessThan( metrics.mainWidth - 4 );
+
+		await page.locator( '[data-magazine73-action="next"]' ).click();
+		await expect( page.locator( '[data-magazine73-page-status]' ) ).not.toContainText( '1 /' );
+
+		const afterFlip = await page.evaluate( () => {
+			const book = document.querySelector( '.magazine73-viewer__book' ).getBoundingClientRect();
+			return { width: book.width, height: book.height };
+		} );
+
+		expect( afterFlip.width ).toBeGreaterThan( afterFlip.height );
+	} );
+
+	test( 'uses a portrait single-page book box on mobile', async ( { page } ) => {
+		await page.setViewportSize( { width: 390, height: 844 } );
+		await openViewerFixture( page );
+		await waitForViewerReady( page );
+
+		const metrics = await page.evaluate( () => {
+			const book = document.querySelector( '.magazine73-viewer__book' ).getBoundingClientRect();
+			return { width: book.width, height: book.height };
+		} );
+
+		expect( metrics.height ).toBeGreaterThan( metrics.width );
 	} );
 } );

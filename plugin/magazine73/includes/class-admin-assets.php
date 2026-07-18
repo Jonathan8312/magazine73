@@ -30,6 +30,7 @@ final class Admin_Assets {
 		$settings_hook = Post_Type::POST_TYPE . '_page_' . Admin_Settings_Page::PAGE_SLUG;
 
 		if ( $settings_hook === $hook_suffix ) {
+			wp_enqueue_script( 'wp-i18n' );
 			Assets::enqueue_admin();
 			return;
 		}
@@ -45,6 +46,8 @@ final class Admin_Assets {
 		}
 
 		wp_enqueue_media();
+		wp_enqueue_script( 'wp-i18n' );
+		wp_enqueue_script( 'postbox' );
 		Assets::enqueue_admin();
 	}
 }

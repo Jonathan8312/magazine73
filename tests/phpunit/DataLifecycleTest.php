@@ -40,6 +40,14 @@ final class DataLifecycleTest extends TestCase {
 		$this->assertSame( Data_Lifecycle::CURRENT_DATA_VERSION, Data_Lifecycle::get_data_version() );
 	}
 
+	public function test_maybe_run_migrations_upgrades_from_version_1_to_current(): void {
+		WordPressStub::$options[ Data_Lifecycle::DATA_VERSION_OPTION ] = 1;
+
+		Data_Lifecycle::maybe_run_migrations();
+
+		$this->assertSame( Data_Lifecycle::CURRENT_DATA_VERSION, Data_Lifecycle::get_data_version() );
+	}
+
 	public function test_sanitize_delete_on_uninstall_defaults_to_false(): void {
 		$this->assertFalse( Data_Lifecycle::sanitize_delete_on_uninstall( null ) );
 	}

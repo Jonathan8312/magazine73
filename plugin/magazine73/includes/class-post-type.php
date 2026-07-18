@@ -24,6 +24,7 @@ final class Post_Type {
 	 */
 	public function init(): void {
 		add_action( 'init', array( $this, 'register' ) );
+		add_filter( 'use_block_editor_for_post_type', array( $this, 'disable_block_editor' ), 10, 2 );
 	}
 
 	/**
@@ -88,6 +89,23 @@ final class Post_Type {
 				'exclude_from_search' => false,
 			),
 		);
+	}
+
+	/**
+	 * Use the classic editor screen for magazines.
+	 *
+	 * Magazines are managed through custom metaboxes and the media library,
+	 * not the block editor.
+	 *
+	 * @param bool   $use_block_editor Whether the block editor is enabled.
+	 * @param string $post_type        Current post type.
+	 */
+	public function disable_block_editor( bool $use_block_editor, string $post_type ): bool {
+		if ( self::POST_TYPE === $post_type ) {
+			return false;
+		}
+
+		return $use_block_editor;
 	}
 
 	/**

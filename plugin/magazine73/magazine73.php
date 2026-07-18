@@ -3,7 +3,7 @@
  * Plugin Name: Magazine73
  * Plugin URI: https://73software.com/magazine73
  * Description: Create, manage, and publish digital magazines with a page-flip viewer.
- * Version: 0.1.0
+ * Version: 0.1.5
  * Requires at least: 6.6
  * Requires PHP: 8.0
  * Author: Jonathan Torres
@@ -17,7 +17,7 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'MAGAZINE73_VERSION' ) ) {
-	define( 'MAGAZINE73_VERSION', '0.1.0' );
+	define( 'MAGAZINE73_VERSION', '0.1.5' );
 }
 
 if ( ! defined( 'MAGAZINE73_FILE' ) ) {
@@ -46,6 +46,7 @@ require_once MAGAZINE73_PATH . 'includes/class-template-loader.php';
 require_once MAGAZINE73_PATH . 'includes/class-magazine-renderer.php';
 require_once MAGAZINE73_PATH . 'includes/class-shortcode.php';
 require_once MAGAZINE73_PATH . 'includes/class-public-magazine.php';
+require_once MAGAZINE73_PATH . 'includes/class-publish-guard.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-metabox.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-pages-panel.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-viewer-settings-metabox.php';

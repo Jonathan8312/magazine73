@@ -6,10 +6,12 @@
 }
 
 .magazine73-public-magazine {
+	box-sizing: border-box;
 	margin-block: 2rem;
 	margin-inline: auto;
-	max-width: 72rem;
+	max-width: min(100%, 72rem);
 	padding-inline: 1rem;
+	width: 100%;
 }
 
 .magazine73-public-magazine__header {
@@ -36,4 +38,12 @@
 .magazine73-public-magazine__viewer {
 	margin-inline: auto;
 	max-width: 100%;
+	width: 100%;
+}
+
+@media (min-width: 782px) {
+	.magazine73-public-magazine {
+		/* Break out of narrow theme content columns on desktop. */
+		max-width: min(100vw - 2rem, 90rem);
+	}
 }
