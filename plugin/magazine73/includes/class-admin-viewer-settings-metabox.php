@@ -78,6 +78,7 @@ final class Admin_Viewer_Settings_Metabox {
 					<?php foreach ( Viewer_Settings::get_color_keys() as $color_key ) : ?>
 						<?php
 						$value      = $overrides['colors'][ $color_key ] ?? '';
+						$defaults   = Viewer_Settings::get_defaults();
 						$field_id   = 'magazine73-override-color-' . $color_key;
 						$field_name = sprintf(
 							'magazine73_viewer_settings[colors][%s]',
@@ -88,14 +89,18 @@ final class Admin_Viewer_Settings_Metabox {
 							<label for="<?php echo esc_attr( $field_id ); ?>">
 								<?php echo esc_html( $this->get_color_label( $color_key ) ); ?>
 							</label>
-							<input
-								type="text"
-								class="widefat"
-								id="<?php echo esc_attr( $field_id ); ?>"
-								name="<?php echo esc_attr( $field_name ); ?>"
-								value="<?php echo esc_attr( $value ); ?>"
-								placeholder="<?php echo esc_attr( 'text' === $color_key ? __( 'Inherit from theme', 'magazine73' ) : '' ); ?>"
-							/>
+							<?php
+							Admin_Color_Field::render(
+								$field_id,
+								$field_name,
+								is_string( $value ) ? $value : '',
+								array(
+									'placeholder' => 'text' === $color_key ? __( 'Inherit from theme', 'magazine73' ) : '',
+									'default'     => $defaults['colors'][ $color_key ] ?? '',
+									'required'    => 'text' !== $color_key,
+								)
+							);
+							?>
 						</p>
 					<?php endforeach; ?>
 				</fieldset>

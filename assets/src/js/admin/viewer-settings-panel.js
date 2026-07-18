@@ -2,6 +2,8 @@
  * Viewer settings panel interactions.
  */
 
+import { initColorFields } from './color-fields.js';
+
 /**
  * Initialize the viewer settings metabox toggle.
  */
@@ -21,6 +23,10 @@ export function initViewerSettingsPanel() {
 
 	const syncVisibility = () => {
 		overrides.hidden = toggle.checked;
+
+		if ( ! toggle.checked ) {
+			initColorFields();
+		}
 	};
 
 	toggle.addEventListener( 'change', syncVisibility );
