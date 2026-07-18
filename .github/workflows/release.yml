@@ -122,7 +122,7 @@ jobs:
         run: bash bin/verify-release-zip.sh "magazine73-${{ steps.version.outputs.version }}.zip"
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: magazine73-${{ steps.version.outputs.version }}.zip
           generate_release_notes: true
