@@ -23,6 +23,24 @@ final class Capabilities {
 	 * Grant magazine capabilities to supported roles.
 	 */
 	public static function activate(): void {
+		self::ensure_role_capabilities();
+
+		( new Post_Type() )->register();
+		flush_rewrite_rules();
+
+		Data_Lifecycle::maybe_run_migrations();
+	}
+
+	/**
+	 * Ensure supported roles have the expected Magazine73 capabilities.
+	 *
+	 * Safe to call on activation and during data migrations.
+	 */
+	public static function ensure_role_capabilities(): void {
+		if ( ! function_exists( 'get_role' ) ) {
+			return;
+		}
+
 		$administrator = get_role( 'administrator' );
 		$editor        = get_role( 'editor' );
 		$capabilities  = array_values( Post_Type::get_capabilities() );
@@ -40,11 +58,6 @@ final class Capabilities {
 				$editor->add_cap( $capability );
 			}
 		}
-
-		( new Post_Type() )->register();
-		flush_rewrite_rules();
-
-		Data_Lifecycle::maybe_run_migrations();
 	}
 
 	/**
