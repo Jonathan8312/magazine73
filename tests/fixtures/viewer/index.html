@@ -21,7 +21,8 @@
 			</aside>
 			<div class="magazine73-viewer__main">
 				<div class="magazine73-viewer__canvas">
-					<div class="magazine73-viewer__loading" data-magazine73-loading aria-live="polite">
+					<div class="magazine73-viewer__loading" data-magazine73-loading aria-live="polite" aria-busy="true" hidden>
+						<span class="magazine73-viewer__loading-spinner" aria-hidden="true"></span>
 						<p class="magazine73-viewer__loading-label" data-magazine73-loading-label data-template="Loading pages %1$d of %2$d">Loading magazine pages…</p>
 						<progress class="magazine73-viewer__loading-progress" data-magazine73-loading-progress max="100" value="0"></progress>
 					</div>
@@ -31,6 +32,7 @@
 						</div>
 					</div>
 				</div>
+				<p class="magazine73-viewer__loading-status" data-magazine73-loading-status hidden aria-live="polite" data-template="Loading pages %1$d of %2$d…"></p>
 				<div class="magazine73-viewer__controls magazine73-controls">
 					<button type="button" class="magazine73-controls__button" data-magazine73-action="thumbnails" aria-expanded="false" aria-label="Toggle page thumbnails">
 						<span class="magazine73-controls__icon" data-magazine73-icon="thumbnails" aria-hidden="true"></span>

@@ -67,7 +67,8 @@ $magazine73_show_controls_bar = $magazine73_show_previous || $magazine73_show_ne
 		<?php endif; ?>
 		<div class="magazine73-viewer__main">
 			<div class="magazine73-viewer__canvas">
-				<div class="magazine73-viewer__loading" data-magazine73-loading aria-live="polite">
+				<div class="magazine73-viewer__loading" data-magazine73-loading aria-live="polite" aria-busy="true" hidden>
+					<span class="magazine73-viewer__loading-spinner" aria-hidden="true"></span>
 					<p
 						class="magazine73-viewer__loading-label"
 						data-magazine73-loading-label
@@ -84,6 +85,14 @@ $magazine73_show_controls_bar = $magazine73_show_previous || $magazine73_show_ne
 					</div>
 				</div>
 			</div>
+			<p
+				class="magazine73-viewer__loading-status"
+				data-magazine73-loading-status
+				hidden
+				aria-live="polite"
+				<?php /* translators: %1$d: loaded page count, %2$d: total page count. */ ?>
+				data-template="<?php echo esc_attr__( 'Loading pages %1$d of %2$d…', 'magazine73' ); ?>"
+			></p>
 			<?php if ( $magazine73_show_controls_bar ) : ?>
 				<div class="magazine73-viewer__controls magazine73-controls">
 					<?php if ( $magazine73_show_thumbnails ) : ?>
