@@ -76,7 +76,7 @@ final class Post_Type {
 				'capabilities'        => self::get_capabilities(),
 				'map_meta_cap'        => true,
 				'hierarchical'        => false,
-				'supports'            => array( 'title', 'editor', 'revisions' ),
+				'supports'            => array( 'title', 'revisions' ),
 				'has_archive'         => false,
 				'rewrite'             => array(
 					'slug'       => 'revistas',
