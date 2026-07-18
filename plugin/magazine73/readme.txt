@@ -4,7 +4,7 @@ Tags: magazine, flipbook, webp, digital publishing, page flip
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 0.1.0
+Stable tag: 0.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,10 +55,16 @@ No. Uninstall cleanup removes Magazine73 posts, metadata, and plugin settings on
 
 == Changelog ==
 
+= 0.1.1 =
+* Fix admin Media Library button and broken admin stylesheet URLs.
+
 = 0.1.0 =
 * Initial public MVP release.
 
 == Upgrade Notice ==
+
+= 0.1.1 =
+Restores Add or Upload Pages in the magazine editor.
 
 = 0.1.0 =
 Initial MVP release of Magazine73.
