@@ -46,6 +46,7 @@ require_once MAGAZINE73_PATH . 'includes/class-template-loader.php';
 require_once MAGAZINE73_PATH . 'includes/class-magazine-renderer.php';
 require_once MAGAZINE73_PATH . 'includes/class-shortcode.php';
 require_once MAGAZINE73_PATH . 'includes/class-public-magazine.php';
+require_once MAGAZINE73_PATH . 'includes/class-publish-guard.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-metabox.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-pages-panel.php';
 require_once MAGAZINE73_PATH . 'includes/class-admin-viewer-settings-metabox.php';

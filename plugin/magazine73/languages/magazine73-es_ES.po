@@ -315,6 +315,10 @@ msgstr "Esta revista no está disponible."
 msgid "This magazine has no pages yet."
 msgstr "Esta revista aún no tiene páginas."
 
+#: includes/class-publish-guard.php:133
+msgid "A magazine cannot be published without at least one page. The magazine was saved as a draft."
+msgstr "Una revista no se puede publicar sin al menos una página. La revista se guardó como borrador."
+
 #: includes/class-post-type.php:34
 #: includes/class-post-type.php:36
 msgid "Magazines"

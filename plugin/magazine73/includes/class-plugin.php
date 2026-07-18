@@ -28,6 +28,7 @@ final class Plugin {
 		( new Data_Lifecycle() )->init();
 		( new Shortcode() )->init();
 		( new Public_Magazine() )->init();
+		( new Publish_Guard() )->init();
 		( new Admin_Metabox() )->init();
 		( new Admin_Pages_Panel() )->init();
 		( new Admin_Viewer_Settings_Metabox() )->init();
