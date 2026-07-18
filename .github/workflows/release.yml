@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -49,7 +49,7 @@ jobs:
         run: vendor/bin/phpunit --configuration phpunit.xml.dist
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '20'
           cache: npm
@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -101,10 +101,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '20'
           cache: npm
@@ -122,7 +122,7 @@ jobs:
         run: bash bin/verify-release-zip.sh "magazine73-${{ steps.version.outputs.version }}.zip"
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: magazine73-${{ steps.version.outputs.version }}.zip
           generate_release_notes: true

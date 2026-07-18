@@ -27,7 +27,7 @@ final class Data_Lifecycle {
 	/**
 	 * Current internal data/schema version.
 	 */
-	public const CURRENT_DATA_VERSION = 1;
+	public const CURRENT_DATA_VERSION = 2;
 
 	/**
 	 * Register hooks.
@@ -108,6 +108,7 @@ final class Data_Lifecycle {
 	private static function get_migrations(): array {
 		return array(
 			1 => array( self::class, 'migrate_to_version_1' ),
+			2 => array( self::class, 'migrate_to_version_2' ),
 		);
 	}
 
@@ -118,5 +119,15 @@ final class Data_Lifecycle {
 	 */
 	public static function migrate_to_version_1(): void {
 		// Intentionally empty for the initial data version.
+	}
+
+	/**
+	 * Ensure role capabilities include settings management after upgrades.
+	 *
+	 * Existing installs may have activated before `manage_magazine73_settings`
+	 * was granted, leaving Magazines → Settings inaccessible to administrators.
+	 */
+	public static function migrate_to_version_2(): void {
+		Capabilities::ensure_role_capabilities();
 	}
 }

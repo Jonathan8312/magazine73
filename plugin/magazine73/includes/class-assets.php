@@ -59,6 +59,7 @@ final class Assets {
 	 * Enqueue the viewer entry assets.
 	 */
 	public static function enqueue_viewer(): void {
+		wp_enqueue_script( 'wp-i18n' );
 		self::enqueue_entry( self::VIEWER_HANDLE, self::VIEWER_ENTRY );
 	}
 
@@ -151,7 +152,7 @@ final class Assets {
 		}
 
 		return array(
-			'css' => array_values( $css_paths ),
+			'css' => array_keys( $css_paths ),
 			'src' => $src,
 		);
 	}
@@ -300,15 +301,13 @@ final class Assets {
 		wp_enqueue_script_module(
 			$handle,
 			$src,
-			array(
-				array(
-					'id' => '@wordpress/i18n',
-				),
-			),
-			null
+			array(),
+			MAGAZINE73_VERSION
 		);
 
-		if ( function_exists( 'wp_set_script_translations' ) ) {
+		if ( function_exists( 'load_script_module_textdomain' ) ) {
+			load_script_module_textdomain( $handle, 'magazine73', MAGAZINE73_PATH . 'languages' );
+		} elseif ( function_exists( 'wp_set_script_translations' ) ) {
 			wp_set_script_translations( $handle, 'magazine73', MAGAZINE73_PATH . 'languages' );
 		}
 
