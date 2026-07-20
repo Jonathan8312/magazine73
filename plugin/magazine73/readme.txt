@@ -4,7 +4,7 @@ Tags: magazine, flipbook, webp, digital publishing, page flip
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 0.1.5
+Stable tag: 0.1.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,7 @@ Magazine73 helps WordPress site owners publish digital magazines using WebP page
 * Progressive page loading and local reading progress.
 * Optional PDF download per magazine.
 * Global viewer settings with per-magazine overrides.
+* Optional Elementor widget (Elementor is not required).
 * English source strings with Spanish translation included.
 
 = Privacy =
@@ -44,6 +45,10 @@ Magazine73 does not collect telemetry or personal data. Reading progress is stor
 
 No. Magazines use WebP page images. PDF files are optional downloads only.
 
+= Does Magazine73 require Elementor? =
+
+No. Elementor is optional. When Elementor is active, Magazine73 registers a viewer widget. You can also embed magazines with the `[magazine73]` shortcode on any page.
+
 = Are Media Library files deleted on uninstall? =
 
 No. Uninstall cleanup removes Magazine73 posts, metadata, and plugin settings only when the **Delete plugin data on uninstall** option is enabled.
@@ -54,6 +59,18 @@ No. Uninstall cleanup removes Magazine73 posts, metadata, and plugin settings on
 2. Public magazine viewer with page-flip controls.
 
 == Changelog ==
+
+= 0.1.8 =
+* Add separate viewer colors for action icons, page counter, and button hover states.
+* Improve Elementor widget color handling, global color resolution, and theme preset fallbacks.
+* Fix Elementor editor preview initialization and asset cache busting after builds.
+
+= 0.1.7 =
+* Add optional Elementor viewer widget and shortcode color overrides.
+* Fix Elementor editor preview so the page-flip viewer initializes correctly.
+
+= 0.1.6 =
+* Add WordPress color pickers for viewer admin colors.
 
 = 0.1.5 =
 * Prevent publishing magazines that do not have at least one WebP page.
@@ -74,6 +91,15 @@ No. Uninstall cleanup removes Magazine73 posts, metadata, and plugin settings on
 * Initial public MVP release.
 
 == Upgrade Notice ==
+
+= 0.1.8 =
+Adds granular viewer color controls, Elementor style improvements, and fixes preview asset caching.
+
+= 0.1.7 =
+Adds an optional Elementor widget and fixes the Elementor editor preview for the viewer.
+
+= 0.1.6 =
+Adds WordPress color pickers for viewer admin colors.
 
 = 0.1.5 =
 Blocks publishing magazines without pages.

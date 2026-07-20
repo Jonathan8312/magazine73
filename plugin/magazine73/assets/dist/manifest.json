@@ -1,6 +1,6 @@
 {
-  "_wordpress-i18n-DLYXnYL7.js": {
-    "file": "js/wordpress-i18n-DLYXnYL7.js",
+  "_wordpress-i18n-BTV7GqaW.js": {
+    "file": "js/wordpress-i18n-BTV7GqaW.js",
     "name": "wordpress-i18n"
   },
   "assets/src/entries/admin.js": {
@@ -9,7 +9,7 @@
     "src": "assets/src/entries/admin.js",
     "isEntry": true,
     "imports": [
-      "_wordpress-i18n-DLYXnYL7.js"
+      "_wordpress-i18n-BTV7GqaW.js"
     ],
     "css": [
       "css/magazine73-editor-MVR8c6E6.css"
@@ -21,10 +21,10 @@
     "src": "assets/src/entries/viewer.js",
     "isEntry": true,
     "imports": [
-      "_wordpress-i18n-DLYXnYL7.js"
+      "_wordpress-i18n-BTV7GqaW.js"
     ],
     "css": [
-      "css/magazine73-viewer-lySUHlhL.css"
+      "css/magazine73-viewer-Dx7r8Upu.css"
     ]
   }
 }

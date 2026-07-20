@@ -3,6 +3,31 @@
  */
 
 /**
+ * Duck-typed element check that works across iframe/editor DOM realms
+ * where `instanceof HTMLElement` can fail.
+ *
+ * @param {unknown} node Candidate node.
+ * @return {node is Element}
+ */
+export function isDomElement( node ) {
+	return Boolean(
+		node &&
+		1 === /** @type {{ nodeType?: number }} */ ( node ).nodeType &&
+		'function' === typeof /** @type {{ getAttribute?: unknown }} */ ( node ).getAttribute
+	);
+}
+
+/**
+ * Duck-typed button check for cross-realm DOM.
+ *
+ * @param {unknown} node Candidate node.
+ * @return {node is HTMLButtonElement}
+ */
+export function isDomButton( node ) {
+	return isDomElement( node ) && 'BUTTON' === /** @type {Element} */ ( node ).tagName;
+}
+
+/**
  * Mark an element as ready for styling hooks.
  *
  * @param {Element} element   Target element.

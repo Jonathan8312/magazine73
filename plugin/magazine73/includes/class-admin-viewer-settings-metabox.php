@@ -87,7 +87,7 @@ final class Admin_Viewer_Settings_Metabox {
 						?>
 						<p>
 							<label for="<?php echo esc_attr( $field_id ); ?>">
-								<?php echo esc_html( $this->get_color_label( $color_key ) ); ?>
+								<?php echo esc_html( Viewer_Settings::get_color_label( $color_key ) ); ?>
 							</label>
 							<?php
 							Admin_Color_Field::render(
@@ -95,9 +95,9 @@ final class Admin_Viewer_Settings_Metabox {
 								$field_name,
 								is_string( $value ) ? $value : '',
 								array(
-									'placeholder' => 'text' === $color_key ? __( 'Inherit from theme', 'magazine73' ) : '',
+									'placeholder' => Viewer_Settings::is_optional_color_key( $color_key ) ? __( 'Inherit from theme', 'magazine73' ) : '',
 									'default'     => $defaults['colors'][ $color_key ] ?? '',
-									'required'    => 'text' !== $color_key,
+									'required'    => ! Viewer_Settings::is_optional_color_key( $color_key ),
 								)
 							);
 							?>
@@ -200,21 +200,6 @@ final class Admin_Viewer_Settings_Metabox {
 		}
 
 		return Viewer_Settings::get_magazine_overrides( $post_id );
-	}
-
-	/**
-	 * Get a translated color field label.
-	 *
-	 * @param string $color_key Color key.
-	 */
-	private function get_color_label( string $color_key ): string {
-		$labels = array(
-			'background' => __( 'Viewer background', 'magazine73' ),
-			'controls'   => __( 'Control buttons', 'magazine73' ),
-			'text'       => __( 'Viewer text', 'magazine73' ),
-		);
-
-		return $labels[ $color_key ] ?? $color_key;
 	}
 
 	/**

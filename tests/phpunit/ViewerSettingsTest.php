@@ -29,8 +29,16 @@ final class ViewerSettingsTest extends TestCase {
 		$defaults = Viewer_Settings::get_defaults();
 
 		$this->assertSame( '#f5f5f5', $defaults['colors']['background'] );
+		$this->assertSame( '', $defaults['colors']['icons'] );
+		$this->assertSame( '', $defaults['colors']['counter'] );
 		$this->assertTrue( $defaults['controls']['download'] );
 		$this->assertTrue( $defaults['controls']['thumbnails'] );
+	}
+
+	public function test_get_color_keys_excludes_legacy_text_key(): void {
+		$this->assertNotContains( 'text', Viewer_Settings::get_color_keys() );
+		$this->assertContains( 'icons', Viewer_Settings::get_color_keys() );
+		$this->assertContains( 'counter', Viewer_Settings::get_color_keys() );
 	}
 
 	public function test_sanitize_global_treats_missing_controls_as_false(): void {

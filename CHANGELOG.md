@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.8] - 2026-07-20
+
+### Added
+
+- Optional Elementor widget (soft dependency) to embed the magazine viewer with magazine selector, control overrides, and color pickers.
+- Shortcode color overrides: `color_background`, `color_controls`, `color_controls_hover`, `color_icons`, `color_icons_hover`, `color_counter`, and legacy `color_text`.
+- Separate viewer color tokens for action button icons, page counter, and button hover states in global settings, per-magazine overrides, Elementor, and shortcode attributes.
+- Automatic control-button hover background when no custom hover color is set.
+- Elementor widget color resolution respects Style tab overrides ahead of the theme preset, and global Elementor colors resolve through the active Site Kit when needed.
+- Asset cache busting via build timestamps so Elementor and browser previews load the latest viewer CSS after releases.
+
+### Fixed
+
+- Elementor editor preview (widget and shortcode) initializes the page-flip viewer after Elementor mounts markup, using duck-typed DOM checks that work inside the preview iframe.
+- Elementor theme presets now fill only empty Style colors instead of overriding configured widget colors.
+- Legacy `color_text` values expand into icon and counter colors for backward compatibility.
+
+## [0.1.7] - 2026-07-18
+
+### Added
+
+- Optional Elementor widget (soft dependency) to embed the magazine viewer with magazine selector, control overrides, and color pickers.
+- Shortcode color overrides: `color_background`, `color_controls`, and `color_text`.
+
+### Fixed
+
+- Elementor editor preview (widget and shortcode) initializes the page-flip viewer after Elementor mounts markup, using duck-typed DOM checks that work inside the preview iframe.
+
+## [0.1.6] - 2026-07-18
+
+### Added
+
+- WordPress Iris color pickers for viewer background, controls, and text colors in Magazines → Settings and per-magazine overrides.
+
 ## [0.1.5] - 2026-07-18
 
 ### Fixed

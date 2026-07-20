@@ -65,7 +65,7 @@ final class Admin_Settings_Page {
 		foreach ( Viewer_Settings::get_color_keys() as $color_key ) {
 			add_settings_field(
 				'magazine73_color_' . $color_key,
-				$this->get_color_label( $color_key ),
+				Viewer_Settings::get_color_label( $color_key ),
 				array( $this, 'render_color_field' ),
 				self::PAGE_SLUG,
 				'magazine73_viewer_colors',
@@ -150,7 +150,7 @@ final class Admin_Settings_Page {
 	 * Render the colors section description.
 	 */
 	public function render_colors_section(): void {
-		echo '<p>' . esc_html__( 'Choose neutral colors for the viewer shell and controls. Use the color picker or enter a hex value such as #f5f5f5. Leave text color empty to inherit typography from the active theme.', 'magazine73' ) . '</p>';
+		echo '<p>' . esc_html__( 'Choose neutral colors for the viewer shell and controls. Use the color picker or enter a hex value such as #f5f5f5. Optional fields inherit from the active theme when left empty.', 'magazine73' ) . '</p>';
 	}
 
 	/**
@@ -210,9 +210,9 @@ final class Admin_Settings_Page {
 			$field_name,
 			is_string( $value ) ? $value : '',
 			array(
-				'placeholder' => 'text' === $color_key ? __( 'Inherit from theme', 'magazine73' ) : '',
+				'placeholder' => Viewer_Settings::is_optional_color_key( $color_key ) ? __( 'Inherit from theme', 'magazine73' ) : '',
 				'default'     => $defaults['colors'][ $color_key ] ?? '',
-				'required'    => 'text' !== $color_key,
+				'required'    => ! Viewer_Settings::is_optional_color_key( $color_key ),
 			)
 		);
 	}
@@ -244,21 +244,6 @@ final class Admin_Settings_Page {
 			<?php echo esc_html( $this->get_control_label( $control_key ) ); ?>
 		</label>
 		<?php
-	}
-
-	/**
-	 * Get a translated color field label.
-	 *
-	 * @param string $color_key Color key.
-	 */
-	private function get_color_label( string $color_key ): string {
-		$labels = array(
-			'background' => __( 'Viewer background', 'magazine73' ),
-			'controls'   => __( 'Control buttons', 'magazine73' ),
-			'text'       => __( 'Viewer text', 'magazine73' ),
-		);
-
-		return $labels[ $color_key ] ?? $color_key;
 	}
 
 	/**

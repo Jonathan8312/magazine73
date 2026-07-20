@@ -2,6 +2,7 @@
  * Local reading progress storage without personal data.
  */
 
+import { isDomElement } from '../shared/helpers.js';
 import { __, sprintf } from '@wordpress/i18n';
 
 const STORAGE_KEY = 'magazine73_reading_progress';
@@ -91,13 +92,13 @@ export function savePage( magazineId, contentHash, pageIndex ) {
 export function promptResumeChoice( viewerElement, savedPage ) {
 	const dialog = viewerElement.querySelector( '[data-magazine73-resume]' );
 
-	if ( ! ( dialog instanceof HTMLElement ) ) {
+	if ( ! isDomElement( dialog ) ) {
 		return Promise.resolve( 0 );
 	}
 
 	const message = dialog.querySelector( '[data-magazine73-resume-message]' );
 
-	if ( message instanceof HTMLElement ) {
+	if ( isDomElement( message ) ) {
 		const template = message.getAttribute( 'data-template' ) || __( 'Continue from page %d or start from the cover?', 'magazine73' );
 		message.textContent = sprintf( template, savedPage + 1 );
 	}
@@ -108,13 +109,13 @@ export function promptResumeChoice( viewerElement, savedPage ) {
 		const handleChoice = ( event ) => {
 			const target = event.target;
 
-			if ( ! ( target instanceof Element ) ) {
+			if ( ! isDomElement( target ) ) {
 				return;
 			}
 
 			const actionElement = target.closest( '[data-magazine73-resume-action]' );
 
-			if ( ! ( actionElement instanceof HTMLElement ) ) {
+			if ( ! isDomElement( actionElement ) ) {
 				return;
 			}
 
@@ -133,10 +134,21 @@ export function promptResumeChoice( viewerElement, savedPage ) {
 
 		const continueButton = dialog.querySelector( '[data-magazine73-resume-action="continue"]' );
 
-		if ( continueButton instanceof HTMLElement ) {
+		if ( isDomElement( continueButton ) ) {
 			continueButton.focus();
 		}
 	} );
+}
+
+/**
+ * Whether the viewer is running inside the Elementor editor canvas.
+ */
+function isElementorEditMode() {
+	try {
+		return Boolean( window.elementorFrontend?.isEditMode?.() );
+	} catch {
+		return false;
+	}
 }
 
 /**
@@ -146,6 +158,11 @@ export function promptResumeChoice( viewerElement, savedPage ) {
  * @param {object} config Viewer configuration.
  */
 export async function resolveStartPage( viewerElement, config ) {
+	// Skip resume prompts in the Elementor editor so the preview can initialize.
+	if ( isElementorEditMode() ) {
+		return 0;
+	}
+
 	const savedPage = getSavedPage( config.magazineId, config.contentHash );
 
 	if ( null === savedPage || savedPage <= 0 ) {
