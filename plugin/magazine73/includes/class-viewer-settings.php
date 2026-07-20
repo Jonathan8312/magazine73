@@ -35,13 +35,44 @@ final class Viewer_Settings {
 	public const SETTINGS_GROUP = 'magazine73_settings';
 
 	/**
-	 * Color setting keys.
+	 * All stored color keys, including legacy values.
 	 *
 	 * @var string[]
 	 */
 	private const COLOR_KEYS = array(
 		'background',
 		'controls',
+		'controls_hover',
+		'icons',
+		'icons_hover',
+		'counter',
+		'text',
+	);
+
+	/**
+	 * Color keys exposed in admin UIs.
+	 *
+	 * @var string[]
+	 */
+	private const ADMIN_COLOR_KEYS = array(
+		'background',
+		'controls',
+		'controls_hover',
+		'icons',
+		'icons_hover',
+		'counter',
+	);
+
+	/**
+	 * Optional color keys that may be left empty.
+	 *
+	 * @var string[]
+	 */
+	private const OPTIONAL_COLOR_KEYS = array(
+		'controls_hover',
+		'icons',
+		'icons_hover',
+		'counter',
 		'text',
 	);
 
@@ -103,14 +134,18 @@ final class Viewer_Settings {
 	/**
 	 * Return neutral default viewer settings.
 	 *
-	 * @return array{colors: array{background: string, controls: string, text: string}, controls: array<string, bool>}
+	 * @return array{colors: array{background: string, controls: string, controls_hover: string, icons: string, icons_hover: string, counter: string, text: string}, controls: array<string, bool>}
 	 */
 	public static function get_defaults(): array {
 		return array(
 			'colors'   => array(
-				'background' => '#f5f5f5',
-				'controls'   => '#ffffff',
-				'text'       => '',
+				'background'     => '#f5f5f5',
+				'controls'       => '#ffffff',
+				'controls_hover' => '',
+				'icons'          => '',
+				'icons_hover'    => '',
+				'counter'        => '',
+				'text'           => '',
 			),
 			'controls' => array(
 				'previous'   => true,
@@ -240,7 +275,35 @@ final class Viewer_Settings {
 	 * @return string[]
 	 */
 	public static function get_color_keys(): array {
-		return self::COLOR_KEYS;
+		return self::ADMIN_COLOR_KEYS;
+	}
+
+	/**
+	 * Whether a color key may be left empty.
+	 *
+	 * @param string $color_key Color key.
+	 */
+	public static function is_optional_color_key( string $color_key ): bool {
+		return in_array( $color_key, self::OPTIONAL_COLOR_KEYS, true );
+	}
+
+	/**
+	 * Get a translated color field label.
+	 *
+	 * @param string $color_key Color key.
+	 */
+	public static function get_color_label( string $color_key ): string {
+		$labels = array(
+			'background'     => __( 'Viewer background', 'magazine73' ),
+			'controls'       => __( 'Control buttons', 'magazine73' ),
+			'controls_hover' => __( 'Control buttons (hover)', 'magazine73' ),
+			'icons'          => __( 'Action button icons', 'magazine73' ),
+			'icons_hover'    => __( 'Action button icons (hover)', 'magazine73' ),
+			'counter'        => __( 'Page counter', 'magazine73' ),
+			'text'           => __( 'Viewer text', 'magazine73' ),
+		);
+
+		return $labels[ $color_key ] ?? $color_key;
 	}
 
 	/**
@@ -270,7 +333,7 @@ final class Viewer_Settings {
 			$default_value = $defaults['colors'][ $color_key ];
 			$raw_value     = $colors[ $color_key ] ?? $default_value;
 
-			if ( 'text' === $color_key ) {
+			if ( self::is_optional_color_key( $color_key ) ) {
 				$sanitized_colors[ $color_key ] = self::sanitize_optional_color( $raw_value );
 				continue;
 			}

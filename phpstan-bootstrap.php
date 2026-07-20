@@ -26,3 +26,6 @@ if ( ! defined( 'MAGAZINE73_URL' ) ) {
 if ( ! defined( 'MAGAZINE73_BASENAME' ) ) {
 	define( 'MAGAZINE73_BASENAME', 'magazine73/magazine73.php' );
 }
+
+require_once __DIR__ . '/tests/phpstan/elementor-stubs.php';
+

@@ -4,6 +4,7 @@
 
 import { PageFlip } from '../../../../plugin/magazine73/third-party/stpageflip/dist/js/page-flip.module.js';
 import '../../../../plugin/magazine73/third-party/stpageflip/src/Style/stPageFlip.css';
+import { isDomElement } from '../shared/helpers.js';
 import { PageLoader } from './page-loader.js';
 
 /**
@@ -44,7 +45,7 @@ function prefersSinglePageViewport() {
 function getAvailableWidth( viewerElement ) {
 	const main = viewerElement.querySelector( '.magazine73-viewer__main' );
 
-	if ( main instanceof HTMLElement && main.clientWidth > 0 ) {
+	if ( isDomElement( main ) && main.clientWidth > 0 ) {
 		return main.clientWidth;
 	}
 
@@ -109,7 +110,7 @@ function applyBookSize( bookElement, size ) {
 
 	const shell = bookElement.closest( '.magazine73-viewer__canvas' );
 
-	if ( shell instanceof HTMLElement ) {
+	if ( isDomElement( shell ) ) {
 		shell.style.width = `${ size.width }px`;
 	}
 }
@@ -168,7 +169,8 @@ function enableCanvasHiDpi( pageFlip ) {
 export function createPageFlipViewer( viewerElement, config, pageLoader, startPage = 0 ) {
 	const bookElement = viewerElement.querySelector( '.magazine73-viewer__book' );
 
-	if ( ! ( bookElement instanceof HTMLElement ) || ! Array.isArray( config.pages ) || 0 === config.pages.length ) {
+	// Duck-type: Elementor preview can break `instanceof HTMLElement` across DOM realms.
+	if ( ! isDomElement( bookElement ) || ! Array.isArray( config.pages ) || 0 === config.pages.length ) {
 		return null;
 	}
 

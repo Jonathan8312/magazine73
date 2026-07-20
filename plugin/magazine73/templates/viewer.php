@@ -32,6 +32,22 @@ if ( ! empty( $settings['colors']['controls'] ) ) {
 	$magazine73_viewer_styles[] = '--magazine73-viewer-controls:' . $settings['colors']['controls'];
 }
 
+if ( ! empty( $settings['colors']['controls_hover'] ) ) {
+	$magazine73_viewer_styles[] = '--magazine73-viewer-controls-hover:' . $settings['colors']['controls_hover'];
+}
+
+if ( ! empty( $settings['colors']['icons'] ) ) {
+	$magazine73_viewer_styles[] = '--magazine73-viewer-icons:' . $settings['colors']['icons'];
+}
+
+if ( ! empty( $settings['colors']['icons_hover'] ) ) {
+	$magazine73_viewer_styles[] = '--magazine73-viewer-icons-hover:' . $settings['colors']['icons_hover'];
+}
+
+if ( ! empty( $settings['colors']['counter'] ) ) {
+	$magazine73_viewer_styles[] = '--magazine73-viewer-counter:' . $settings['colors']['counter'];
+}
+
 if ( ! empty( $settings['colors']['text'] ) ) {
 	$magazine73_viewer_styles[] = '--magazine73-viewer-text:' . $settings['colors']['text'];
 }
