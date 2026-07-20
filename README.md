@@ -21,6 +21,7 @@ Magazine73 is currently under active development and is not ready for production
 - Progressive page loading.
 - Reading progress stored locally without personal data.
 - Shortcode support.
+- Optional Elementor widget (soft dependency; Elementor not required).
 - Public magazine URLs.
 - Global viewer settings with per-magazine overrides.
 - English source language and Spanish translation.

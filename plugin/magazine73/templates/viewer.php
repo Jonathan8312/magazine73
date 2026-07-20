@@ -32,6 +32,22 @@ if ( ! empty( $settings['colors']['controls'] ) ) {
 	$magazine73_viewer_styles[] = '--magazine73-viewer-controls:' . $settings['colors']['controls'];
 }
 
+if ( ! empty( $settings['colors']['controls_hover'] ) ) {
+	$magazine73_viewer_styles[] = '--magazine73-viewer-controls-hover:' . $settings['colors']['controls_hover'];
+}
+
+if ( ! empty( $settings['colors']['icons'] ) ) {
+	$magazine73_viewer_styles[] = '--magazine73-viewer-icons:' . $settings['colors']['icons'];
+}
+
+if ( ! empty( $settings['colors']['icons_hover'] ) ) {
+	$magazine73_viewer_styles[] = '--magazine73-viewer-icons-hover:' . $settings['colors']['icons_hover'];
+}
+
+if ( ! empty( $settings['colors']['counter'] ) ) {
+	$magazine73_viewer_styles[] = '--magazine73-viewer-counter:' . $settings['colors']['counter'];
+}
+
 if ( ! empty( $settings['colors']['text'] ) ) {
 	$magazine73_viewer_styles[] = '--magazine73-viewer-text:' . $settings['colors']['text'];
 }
@@ -67,7 +83,8 @@ $magazine73_show_controls_bar = $magazine73_show_previous || $magazine73_show_ne
 		<?php endif; ?>
 		<div class="magazine73-viewer__main">
 			<div class="magazine73-viewer__canvas">
-				<div class="magazine73-viewer__loading" data-magazine73-loading aria-live="polite">
+				<div class="magazine73-viewer__loading" data-magazine73-loading aria-live="polite" aria-busy="true" hidden>
+					<span class="magazine73-viewer__loading-spinner" aria-hidden="true"></span>
 					<p
 						class="magazine73-viewer__loading-label"
 						data-magazine73-loading-label
@@ -84,6 +101,14 @@ $magazine73_show_controls_bar = $magazine73_show_previous || $magazine73_show_ne
 					</div>
 				</div>
 			</div>
+			<p
+				class="magazine73-viewer__loading-status"
+				data-magazine73-loading-status
+				hidden
+				aria-live="polite"
+				<?php /* translators: %1$d: loaded page count, %2$d: total page count. */ ?>
+				data-template="<?php echo esc_attr__( 'Loading pages %1$d of %2$d…', 'magazine73' ); ?>"
+			></p>
 			<?php if ( $magazine73_show_controls_bar ) : ?>
 				<div class="magazine73-viewer__controls magazine73-controls">
 					<?php if ( $magazine73_show_thumbnails ) : ?>

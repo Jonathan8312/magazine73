@@ -27,6 +27,7 @@ final class Plugin {
 		( new Viewer_Settings() )->init();
 		( new Data_Lifecycle() )->init();
 		( new Shortcode() )->init();
+		( new Elementor_Integration() )->init();
 		( new Public_Magazine() )->init();
 		( new Publish_Guard() )->init();
 		( new Admin_Metabox() )->init();

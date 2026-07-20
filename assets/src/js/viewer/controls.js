@@ -12,6 +12,7 @@ import fullscreenExitIcon from '../../icons/fullscreen-exit.svg?raw';
 import thumbnailsIcon from '../../icons/thumbnails.svg?raw';
 import downloadIcon from '../../icons/download.svg?raw';
 import { sanitizeImageUrl } from './page-loader.js';
+import { isDomButton, isDomElement } from '../shared/helpers.js';
 import { __ } from '@wordpress/i18n';
 
 const ICONS = {
@@ -37,7 +38,7 @@ const ZOOM_STEP = 0.25;
  */
 function injectControlIcons( viewerElement ) {
 	viewerElement.querySelectorAll( '[data-magazine73-icon]' ).forEach( ( iconElement ) => {
-		if ( ! ( iconElement instanceof HTMLElement ) ) {
+		if ( ! isDomElement( iconElement ) ) {
 			return;
 		}
 
@@ -73,14 +74,14 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 	const thumbnailsToggle = viewerElement.querySelector( '[data-magazine73-action="thumbnails"]' );
 	const thumbnailsPanel = viewerElement.querySelector( '[data-magazine73-thumbnails]' );
 	const zoomElement = viewerElement.querySelector( '[data-magazine73-zoom]' );
-	const fullscreenIcon = fullscreenButton instanceof HTMLButtonElement
+	const fullscreenIcon = isDomButton( fullscreenButton )
 		? fullscreenButton.querySelector( '[data-magazine73-icon]' )
 		: null;
 
 	let zoomLevel = ZOOM_MIN;
 
 	const applyZoom = () => {
-		if ( ! ( zoomElement instanceof HTMLElement ) ) {
+		if ( ! isDomElement( zoomElement ) ) {
 			return;
 		}
 
@@ -88,7 +89,7 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 	};
 
 	const updateStatus = () => {
-		if ( statusElement instanceof HTMLElement ) {
+		if ( isDomElement( statusElement ) ) {
 			const currentPage = pageFlip.getCurrentPageIndex() + 1;
 			const totalPages = pageFlip.getPageCount();
 			statusElement.textContent = `${ currentPage } / ${ totalPages }`;
@@ -98,23 +99,23 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 			onPageChange( pageFlip.getCurrentPageIndex() );
 		}
 
-		if ( previousButton instanceof HTMLButtonElement ) {
+		if ( isDomButton( previousButton ) ) {
 			previousButton.disabled = pageFlip.getCurrentPageIndex() <= 0;
 		}
 
-		if ( nextButton instanceof HTMLButtonElement ) {
+		if ( isDomButton( nextButton ) ) {
 			nextButton.disabled = pageFlip.getCurrentPageIndex() >= pageFlip.getPageCount() - 1;
 		}
 
-		if ( zoomInButton instanceof HTMLButtonElement ) {
+		if ( isDomButton( zoomInButton ) ) {
 			zoomInButton.disabled = zoomLevel >= ZOOM_MAX;
 		}
 
-		if ( zoomOutButton instanceof HTMLButtonElement ) {
+		if ( isDomButton( zoomOutButton ) ) {
 			zoomOutButton.disabled = zoomLevel <= ZOOM_MIN;
 		}
 
-		if ( zoomResetButton instanceof HTMLButtonElement ) {
+		if ( isDomButton( zoomResetButton ) ) {
 			zoomResetButton.disabled = zoomLevel <= ZOOM_MIN;
 		}
 	};
@@ -127,15 +128,15 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 		pageFlip.flipNext( 'bottom' );
 	};
 
-	if ( previousButton instanceof HTMLButtonElement ) {
+	if ( isDomButton( previousButton ) ) {
 		previousButton.addEventListener( 'click', flipPrevious );
 	}
 
-	if ( nextButton instanceof HTMLButtonElement ) {
+	if ( isDomButton( nextButton ) ) {
 		nextButton.addEventListener( 'click', flipNext );
 	}
 
-	if ( zoomInButton instanceof HTMLButtonElement ) {
+	if ( isDomButton( zoomInButton ) ) {
 		zoomInButton.addEventListener( 'click', () => {
 			zoomLevel = Math.min( ZOOM_MAX, zoomLevel + ZOOM_STEP );
 			applyZoom();
@@ -143,7 +144,7 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 		} );
 	}
 
-	if ( zoomOutButton instanceof HTMLButtonElement ) {
+	if ( isDomButton( zoomOutButton ) ) {
 		zoomOutButton.addEventListener( 'click', () => {
 			zoomLevel = Math.max( ZOOM_MIN, zoomLevel - ZOOM_STEP );
 			applyZoom();
@@ -151,7 +152,7 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 		} );
 	}
 
-	if ( zoomResetButton instanceof HTMLButtonElement ) {
+	if ( isDomButton( zoomResetButton ) ) {
 		zoomResetButton.addEventListener( 'click', () => {
 			zoomLevel = ZOOM_MIN;
 			applyZoom();
@@ -159,7 +160,7 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 		} );
 	}
 
-	if ( fullscreenButton instanceof HTMLButtonElement ) {
+	if ( isDomButton( fullscreenButton ) ) {
 		fullscreenButton.addEventListener( 'click', async () => {
 			if ( document.fullscreenElement === viewerElement ) {
 				await document.exitFullscreen();
@@ -171,7 +172,7 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 	}
 
 	document.addEventListener( 'fullscreenchange', () => {
-		if ( ! ( fullscreenIcon instanceof HTMLElement ) ) {
+		if ( ! isDomElement( fullscreenIcon ) ) {
 			return;
 		}
 
@@ -179,14 +180,14 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 		fullscreenIcon.setAttribute( 'data-magazine73-icon', isFullscreen ? 'fullscreen-exit' : 'fullscreen-enter' );
 		fullscreenIcon.innerHTML = isFullscreen ? ICONS[ 'fullscreen-exit' ] : ICONS[ 'fullscreen-enter' ];
 
-		if ( fullscreenButton instanceof HTMLButtonElement ) {
+		if ( isDomButton( fullscreenButton ) ) {
 			const enterLabel = fullscreenButton.getAttribute( 'data-enter-label' ) || __( 'Enter fullscreen', 'magazine73' );
 			const exitLabel = fullscreenButton.getAttribute( 'data-exit-label' ) || __( 'Exit fullscreen', 'magazine73' );
 			fullscreenButton.setAttribute( 'aria-label', isFullscreen ? exitLabel : enterLabel );
 		}
 	} );
 
-	if ( thumbnailsToggle instanceof HTMLButtonElement && thumbnailsPanel instanceof HTMLElement ) {
+	if ( isDomButton( thumbnailsToggle ) && isDomElement( thumbnailsPanel ) ) {
 		thumbnailsToggle.addEventListener( 'click', () => {
 			const isHidden = thumbnailsPanel.hasAttribute( 'hidden' );
 			thumbnailsPanel.toggleAttribute( 'hidden', ! isHidden );
@@ -194,10 +195,10 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 		} );
 	}
 
-	if ( thumbnailsPanel instanceof HTMLElement && Array.isArray( config.pages ) ) {
+	if ( isDomElement( thumbnailsPanel ) && Array.isArray( config.pages ) ) {
 		const list = thumbnailsPanel.querySelector( '[data-magazine73-thumbnails-list]' );
 
-		if ( list instanceof HTMLElement ) {
+		if ( isDomElement( list ) ) {
 			config.pages.forEach( ( page, index ) => {
 				if ( page.blank || '' === page.url ) {
 					return;
@@ -209,9 +210,7 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 				item.dataset.pageIndex = String( index );
 
 				const image = document.createElement( 'img' );
-				const thumbnailUrl = pageLoader
-					? sanitizeImageUrl( pageLoader.getResolvedUrls()[ index ] )
-					: null;
+				const thumbnailUrl = sanitizeImageUrl( page.url );
 
 				if ( ! thumbnailUrl ) {
 					return;
@@ -220,6 +219,7 @@ export function bindViewerControls( viewerElement, pageFlip, config, pageLoader 
 				image.setAttribute( 'src', thumbnailUrl );
 				image.alt = '';
 				image.loading = 'lazy';
+				image.decoding = 'async';
 				item.appendChild( image );
 
 				item.addEventListener( 'click', () => {

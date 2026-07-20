@@ -276,12 +276,22 @@ final class Assets {
 		}
 
 		$style_handle = sanitize_key( $handle_prefix . '-css-' . $index );
+		$version      = MAGAZINE73_VERSION;
+		$absolute     = MAGAZINE73_PATH . $path;
+
+		if ( is_readable( $absolute ) ) {
+			$mtime = filemtime( $absolute );
+
+			if ( is_int( $mtime ) && $mtime > 0 ) {
+				$version .= '.' . $mtime;
+			}
+		}
 
 		wp_enqueue_style(
 			$style_handle,
 			MAGAZINE73_URL . $path,
 			array(),
-			MAGAZINE73_VERSION
+			$version
 		);
 
 		self::$enqueued_styles[ $path ] = true;

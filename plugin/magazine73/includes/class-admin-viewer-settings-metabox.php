@@ -78,6 +78,7 @@ final class Admin_Viewer_Settings_Metabox {
 					<?php foreach ( Viewer_Settings::get_color_keys() as $color_key ) : ?>
 						<?php
 						$value      = $overrides['colors'][ $color_key ] ?? '';
+						$defaults   = Viewer_Settings::get_defaults();
 						$field_id   = 'magazine73-override-color-' . $color_key;
 						$field_name = sprintf(
 							'magazine73_viewer_settings[colors][%s]',
@@ -86,16 +87,20 @@ final class Admin_Viewer_Settings_Metabox {
 						?>
 						<p>
 							<label for="<?php echo esc_attr( $field_id ); ?>">
-								<?php echo esc_html( $this->get_color_label( $color_key ) ); ?>
+								<?php echo esc_html( Viewer_Settings::get_color_label( $color_key ) ); ?>
 							</label>
-							<input
-								type="text"
-								class="widefat"
-								id="<?php echo esc_attr( $field_id ); ?>"
-								name="<?php echo esc_attr( $field_name ); ?>"
-								value="<?php echo esc_attr( $value ); ?>"
-								placeholder="<?php echo esc_attr( 'text' === $color_key ? __( 'Inherit from theme', 'magazine73' ) : '' ); ?>"
-							/>
+							<?php
+							Admin_Color_Field::render(
+								$field_id,
+								$field_name,
+								is_string( $value ) ? $value : '',
+								array(
+									'placeholder' => Viewer_Settings::is_optional_color_key( $color_key ) ? __( 'Inherit from theme', 'magazine73' ) : '',
+									'default'     => $defaults['colors'][ $color_key ] ?? '',
+									'required'    => ! Viewer_Settings::is_optional_color_key( $color_key ),
+								)
+							);
+							?>
 						</p>
 					<?php endforeach; ?>
 				</fieldset>
@@ -195,21 +200,6 @@ final class Admin_Viewer_Settings_Metabox {
 		}
 
 		return Viewer_Settings::get_magazine_overrides( $post_id );
-	}
-
-	/**
-	 * Get a translated color field label.
-	 *
-	 * @param string $color_key Color key.
-	 */
-	private function get_color_label( string $color_key ): string {
-		$labels = array(
-			'background' => __( 'Viewer background', 'magazine73' ),
-			'controls'   => __( 'Control buttons', 'magazine73' ),
-			'text'       => __( 'Viewer text', 'magazine73' ),
-		);
-
-		return $labels[ $color_key ] ?? $color_key;
 	}
 
 	/**

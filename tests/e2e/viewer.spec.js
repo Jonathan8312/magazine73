@@ -120,10 +120,34 @@ test.describe( 'Magazine73 viewer fixture', () => {
 		const resumeDialog = page.locator( '[data-magazine73-resume]' );
 		await expect( resumeDialog ).toBeVisible( { timeout: 15000 } );
 		await expect( page.locator( '[data-magazine73-resume-message]' ) ).toContainText( 'Continue from page 3' );
+		await expect( page.locator( '[data-magazine73-loading]' ) ).toHaveAttribute( 'hidden', '' );
 
 		await page.locator( '[data-magazine73-resume-action="continue"]' ).click();
-		await waitForViewerReady( page );
 		await expect( resumeDialog ).toBeHidden();
+		await waitForViewerReady( page );
+	} );
+
+	test( 'resume restart becomes ready and exposes a loading spinner', async ( { page } ) => {
+		await page.addInitScript( () => {
+			window.localStorage.setItem(
+				'magazine73_reading_progress',
+				JSON.stringify( {
+					1: {
+						hash: 'fixture',
+						page: 2,
+					},
+				} )
+			);
+		} );
+
+		await openViewerFixture( page );
+		await expect( page.locator( '[data-magazine73-resume]' ) ).toBeVisible( { timeout: 15000 } );
+		await expect( page.locator( '.magazine73-viewer__loading-spinner' ) ).toHaveCount( 1 );
+
+		await page.locator( '[data-magazine73-resume-action="restart"]' ).click();
+		await waitForViewerReady( page );
+		await expect( page.locator( '[data-magazine73-loading]' ) ).toHaveAttribute( 'hidden', '' );
+		await expect( page.locator( '[data-magazine73-page-status]' ) ).toContainText( '1 /' );
 	} );
 
 	test( 'uses a landscape two-page book box on desktop', async ( { page } ) => {

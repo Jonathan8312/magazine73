@@ -65,7 +65,7 @@ final class Admin_Settings_Page {
 		foreach ( Viewer_Settings::get_color_keys() as $color_key ) {
 			add_settings_field(
 				'magazine73_color_' . $color_key,
-				$this->get_color_label( $color_key ),
+				Viewer_Settings::get_color_label( $color_key ),
 				array( $this, 'render_color_field' ),
 				self::PAGE_SLUG,
 				'magazine73_viewer_colors',
@@ -150,7 +150,7 @@ final class Admin_Settings_Page {
 	 * Render the colors section description.
 	 */
 	public function render_colors_section(): void {
-		echo '<p>' . esc_html__( 'Choose neutral colors for the viewer shell and controls. Leave text color empty to inherit typography from the active theme.', 'magazine73' ) . '</p>';
+		echo '<p>' . esc_html__( 'Choose neutral colors for the viewer shell and controls. Use the color picker or enter a hex value such as #f5f5f5. Optional fields inherit from the active theme when left empty.', 'magazine73' ) . '</p>';
 	}
 
 	/**
@@ -196,6 +196,7 @@ final class Admin_Settings_Page {
 	public function render_color_field( array $args ): void {
 		$color_key  = $args['color_key'];
 		$settings   = Viewer_Settings::get_global();
+		$defaults   = Viewer_Settings::get_defaults();
 		$value      = $settings['colors'][ $color_key ] ?? '';
 		$field_id   = 'magazine73-color-' . $color_key;
 		$field_name = sprintf(
@@ -203,16 +204,17 @@ final class Admin_Settings_Page {
 			Viewer_Settings::OPTION_KEY,
 			$color_key
 		);
-		?>
-		<input
-			type="text"
-			class="regular-text"
-			id="<?php echo esc_attr( $field_id ); ?>"
-			name="<?php echo esc_attr( $field_name ); ?>"
-			value="<?php echo esc_attr( $value ); ?>"
-			placeholder="<?php echo esc_attr( 'text' === $color_key ? __( 'Inherit from theme', 'magazine73' ) : '' ); ?>"
-		/>
-		<?php
+
+		Admin_Color_Field::render(
+			$field_id,
+			$field_name,
+			is_string( $value ) ? $value : '',
+			array(
+				'placeholder' => Viewer_Settings::is_optional_color_key( $color_key ) ? __( 'Inherit from theme', 'magazine73' ) : '',
+				'default'     => $defaults['colors'][ $color_key ] ?? '',
+				'required'    => ! Viewer_Settings::is_optional_color_key( $color_key ),
+			)
+		);
 	}
 
 	/**
@@ -242,21 +244,6 @@ final class Admin_Settings_Page {
 			<?php echo esc_html( $this->get_control_label( $control_key ) ); ?>
 		</label>
 		<?php
-	}
-
-	/**
-	 * Get a translated color field label.
-	 *
-	 * @param string $color_key Color key.
-	 */
-	private function get_color_label( string $color_key ): string {
-		$labels = array(
-			'background' => __( 'Viewer background', 'magazine73' ),
-			'controls'   => __( 'Control buttons', 'magazine73' ),
-			'text'       => __( 'Viewer text', 'magazine73' ),
-		);
-
-		return $labels[ $color_key ] ?? $color_key;
 	}
 
 	/**
